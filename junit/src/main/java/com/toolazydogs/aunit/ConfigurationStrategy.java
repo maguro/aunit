@@ -23,7 +23,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 import com.toolazydogs.aunit.internal.AnnotatedWithConfiguration;
-import com.toolazydogs.aunit.internal.JUnit4ConfigMethods;
+import com.toolazydogs.aunit.internal.AntlrConfigMethods;
 
 
 /**
@@ -37,5 +37,5 @@ import com.toolazydogs.aunit.internal.JUnit4ConfigMethods;
 @Inherited
 public @interface ConfigurationStrategy
 {
-    Class<? extends JUnit4ConfigMethods>[] value() default {AnnotatedWithConfiguration.class};
+    Class<? extends AntlrConfigMethods>[] value() default {AnnotatedWithConfiguration.class};
 }

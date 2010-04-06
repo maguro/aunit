@@ -17,46 +17,38 @@
 package com.toolazydogs.aunit;
 
 import static com.toolazydogs.aunit.Assert.assertToken;
+import static com.toolazydogs.aunit.Assert.assertTree;
+import static com.toolazydogs.aunit.CoreOptions.lexer;
 import static com.toolazydogs.aunit.CoreOptions.options;
+import static com.toolazydogs.aunit.CoreOptions.parser;
+import static com.toolazydogs.aunit.Work.parse;
+import static com.toolazydogs.aunit.Work.scan;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import com.toolazydogs.aunit.tests.Test01Lexer;
+import com.toolazydogs.aunit.tests.Antlr01Lexer;
+import com.toolazydogs.aunit.tests.Antlr01Parser;
 
 
 /**
  * @version $Revision: $ $Date: $
  */
-@RunWith(JUnit4TestRunner.class)
+@RunWith(AntlrTestRunner.class)
 public class TestLexer01
 {
-    @Inject(lexerClass = Test01Lexer.class)
-    private LexerWrapper lexer = null;
-
     @Configuration
     public static Option[] configure()
     {
         return options(
-//                equinox(),
-//                felix(),
-//                knopflerfish(),
-////                papoose(),
-//                compendiumProfile(),
-//                provision(
-//                        mavenBundle().groupId("org.livetribe.slp").artifactId("livetribe-slp-osgi").version(asInProject())
-//                )
-//                // vmOption("-Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=5005"),
-//                // this is necessary to let junit runner not timout the remote process before attaching debugger
-//                // setting timeout to 0 means wait as long as the remote service comes available.
-//                // starting with version 0.5.0 of PAx Exam this is no longer required as by default the framework tests
-//                // will not be triggered till the framework is not started
-//                // waitForFrameworkStartup()
+                lexer(Antlr01Lexer.class),
+                parser(Antlr01Parser.class)
         );
     }
 
     @Test
     public void test() throws Exception
     {
-        assertToken(Test01Lexer.NAME, "abc", lexer.scan("abc"));
+        assertToken(Antlr01Lexer.NAME, "abc", scan("abc"));
+        assertTree(Antlr01Parser.STATEMENT, "(+ 1 2)", parse("statement", "1 + 2"));
     }
 }

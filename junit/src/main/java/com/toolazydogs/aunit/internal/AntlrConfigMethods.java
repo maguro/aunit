@@ -18,9 +18,9 @@ package com.toolazydogs.aunit.internal;
 
 import java.util.Collection;
 
-import org.junit.internal.runners.TestClass;
+import org.junit.runners.model.TestClass;
 
-import com.toolazydogs.aunit.JUnit4ConfigMethod;
+import com.toolazydogs.aunit.AntlrConfigMethod;
 
 
 /**
@@ -29,7 +29,7 @@ import com.toolazydogs.aunit.JUnit4ConfigMethod;
  * @author Alin Dreghiciu (adreghiciu@gmail.com)
  * @version $Revision: $ $Date: $
  */
-public interface JUnit4ConfigMethods
+public interface AntlrConfigMethods
 {
     /**
      * Returns configuration methods determined by this strategy.
@@ -39,5 +39,5 @@ public interface JUnit4ConfigMethods
      * @return configuration options (cannot be null, but can be empty)
      * @throws Exception - If finding configuration methods fails
      */
-    Collection<? extends JUnit4ConfigMethod> getConfigMethods(TestClass testClass, Object testInstance) throws Exception;
+    Collection<? extends AntlrConfigMethod> getConfigMethods(TestClass testClass, Object testInstance) throws Exception;
 }

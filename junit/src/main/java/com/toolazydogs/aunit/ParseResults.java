@@ -16,11 +16,14 @@
  */
 package com.toolazydogs.aunit;
 
+import java.util.logging.Logger;
+
 
 /**
  * @version $Revision: $ $Date: $
  */
-public interface LexerWrapper
+public class ParseResults
 {
-    ScanResults scan(String string);
+    private final static String CLASS_NAME = ParseResults.class.getName();
+    private final static Logger LOGGER = Logger.getLogger(CLASS_NAME);
 }

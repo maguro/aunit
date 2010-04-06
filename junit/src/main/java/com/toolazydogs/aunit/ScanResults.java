@@ -16,11 +16,22 @@
  */
 package com.toolazydogs.aunit;
 
+import org.antlr.runtime.Token;
+import org.antlr.runtime.TokenSource;
+
 
 /**
  * @version $Revision: $ $Date: $
  */
-public interface LexerWrapper
+public class ScanResults
 {
-    ScanResults scan(String string);
+    public Token getSingleToken()
+    {
+        return null;
+    }
+
+    public TokenSource getTokenSource()
+    {
+        return null;
+    }
 }

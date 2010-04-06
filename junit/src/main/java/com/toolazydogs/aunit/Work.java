@@ -17,20 +17,20 @@
 package com.toolazydogs.aunit;
 
 import org.antlr.runtime.Token;
-import org.antlr.runtime.TokenSource;
+import org.antlr.runtime.tree.Tree;
 
 
 /**
  * @version $Revision: $ $Date: $
  */
-public class PostScan
+public class Work
 {
-    public Token getSingleToken()
+    public static Token scan(String characters)
     {
         return null;
     }
 
-    public TokenSource getTokenSource()
+    public static Tree parse(String production, String stream)
     {
         return null;
     }

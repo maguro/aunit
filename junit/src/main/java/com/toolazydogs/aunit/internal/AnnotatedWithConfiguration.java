@@ -22,11 +22,12 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import org.junit.internal.runners.TestClass;
+import org.junit.runners.model.FrameworkMethod;
+import org.junit.runners.model.TestClass;
 
+import com.toolazydogs.aunit.AntlrConfigMethod;
 import com.toolazydogs.aunit.AppliesTo;
 import com.toolazydogs.aunit.Configuration;
-import com.toolazydogs.aunit.JUnit4ConfigMethod;
 import com.toolazydogs.aunit.Option;
 
 
@@ -37,39 +38,32 @@ import com.toolazydogs.aunit.Option;
  * @author Alin Dreghiciu (adreghiciu@gmail.com)
  * @version $Revision: $ $Date: $
  */
-public class AnnotatedWithConfiguration implements JUnit4ConfigMethods
+public class AnnotatedWithConfiguration implements AntlrConfigMethods
 {
     /**
      * {@inheritDoc}
      */
-    public Collection<? extends JUnit4ConfigMethod> getConfigMethods(final TestClass testClass, final Object testInstance)
+    public Collection<? extends AntlrConfigMethod> getConfigMethods(final TestClass testClass, final Object testInstance)
     {
-        final List<JUnit4ConfigMethod> configMethods = new ArrayList<JUnit4ConfigMethod>();
-        for (Method configMethod : testClass.getAnnotatedMethods(Configuration.class))
+        final List<AntlrConfigMethod> configMethods = new ArrayList<AntlrConfigMethod>();
+        for (FrameworkMethod configMethod : testClass.getAnnotatedMethods(Configuration.class))
         {
-            if (!Modifier.isAbstract(configMethod.getModifiers())
-                && configMethod.getParameterTypes() != null
-                && configMethod.getParameterTypes().length == 0
-                && configMethod.getReturnType().isArray()
-                && Option.class.isAssignableFrom(configMethod.getReturnType().getComponentType()))
+            final Method method = configMethod.getMethod();
+
+            if (!Modifier.isAbstract(method.getModifiers())
+                && method.getParameterTypes() != null
+                && method.getParameterTypes().length == 0
+                && method.getReturnType().isArray()
+                && Option.class.isAssignableFrom(method.getReturnType().getComponentType()))
             {
                 final AppliesTo appliesToAnnotation = configMethod.getAnnotation(AppliesTo.class);
                 if (appliesToAnnotation != null)
                 {
-                    configMethods.add(
-                            new AppliesToConfigMethod(
-                                    configMethod,
-                                    Modifier.isStatic(configMethod.getModifiers()) ? null : testInstance
-                            )
-                    );
+                    configMethods.add(new AppliesToConfigMethod(method, Modifier.isStatic(method.getModifiers()) ? null : testInstance));
                 }
                 else
                 {
-                    configMethods.add(
-                            new DefaultConfigMethod(
-                                    configMethod, Modifier.isStatic(configMethod.getModifiers()) ? null : testInstance
-                            )
-                    );
+                    configMethods.add(new DefaultConfigMethod(method, Modifier.isStatic(method.getModifiers()) ? null : testInstance));
                 }
             }
         }

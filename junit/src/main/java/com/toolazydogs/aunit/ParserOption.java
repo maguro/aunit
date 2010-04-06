@@ -16,27 +16,23 @@
  */
 package com.toolazydogs.aunit;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
-
-import org.antlr.runtime.Lexer;
+import org.antlr.runtime.Parser;
 
 
 /**
- * @author Toni Menzel ( toni@okidokiteam.com )
  * @version $Revision: $ $Date: $
  */
-@Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.FIELD)
-public @interface Inject
+public class ParserOption implements Option
 {
-    /**
-     * The class for the lexer to be used in the test
-     *
-     * @return the class for the lexer to be used in the test
-     */
-    public abstract Class<? extends Lexer> lexerClass();
+    private final Class<? extends Parser> parserClass;
 
+    public ParserOption(Class<? extends Parser> parserClass)
+    {
+        this.parserClass = parserClass;
+    }
+
+    public Class<? extends Parser> getParserClass()
+    {
+        return parserClass;
+    }
 }

@@ -21,25 +21,25 @@ import java.lang.reflect.Method;
 import java.util.logging.Logger;
 
 import static com.toolazydogs.aunit.NullArgumentException.validateNotNull;
-import org.junit.internal.runners.TestClass;
-import org.junit.internal.runners.TestMethod;
+import org.junit.runners.model.Statement;
+import org.junit.runners.model.TestClass;
 
 import com.toolazydogs.aunit.Option;
 
 
 /**
- * A {@link TestMethod} that upon invocation creates a lexer, parser, or tree walker and executes the test.
+ * A {@link Statement} that upon invocation creates a lexer, parser, or tree walker and executes the test.
  *
  * @author Alin Dreghiciu (adreghiciu@gmail.com)
  * @author Alan D. Cabrera (adc@toolazydogs.com)
  * @version $Revision: $ $Date: $
  */
-public class JUnit4TestMethod extends TestMethod
+public class AntlrTestMethod extends Statement
 {
     /**
      * JUL logger.
      */
-    private static final Logger LOG = Logger.getLogger(JUnit4TestMethod.class.getName());
+    private static final Logger LOG = Logger.getLogger(AntlrTestMethod.class.getName());
 
     /**
      * Test method. Cannot reuse the one from super class as it is not public.
@@ -63,9 +63,8 @@ public class JUnit4TestMethod extends TestMethod
      * @param testClass   test class (cannot be null)
      * @param userOptions user options (can be null)
      */
-    public JUnit4TestMethod(final Method testMethod, final TestClass testClass, final Option... userOptions)
+    public AntlrTestMethod(final Method testMethod, final TestClass testClass, final Option... userOptions)
     {
-        super(testMethod, testClass);
         validateNotNull(testMethod, "Test method");
         validateNotNull(testClass, "Test class");
 
@@ -77,10 +76,9 @@ public class JUnit4TestMethod extends TestMethod
     /**
      * {@inheritDoc} Starts the test container, installs the test bundle and executes the test within the container.
      */
-    @Override
     public void invoke(Object test) throws IllegalArgumentException, IllegalAccessException, InvocationTargetException
     {
-        final String fullTestName = name + "(" + testMethod.getDeclaringClass().getName() + ")";
+        final String fullTestName = name + "(" + testMethod.getName() + ")";
         LOG.info("Starting test " + fullTestName);
 
 
@@ -89,7 +87,7 @@ public class JUnit4TestMethod extends TestMethod
         {
             LOG.info("Starting test " + fullTestName);
             ((CallableTestMethod)test).call();
-            LOG.info("Test " + fullTestName + " ended succesfully");
+            LOG.info("Test " + fullTestName + " ended successfully");
         }
         catch (InstantiationException e)
         {
@@ -119,5 +117,11 @@ public class JUnit4TestMethod extends TestMethod
     public String getName()
     {
         return name;
+    }
+
+    @Override
+    public void evaluate() throws Throwable
+    {
+        //Todo change body of implemented methods use File | Settings | File Templates.
     }
 }

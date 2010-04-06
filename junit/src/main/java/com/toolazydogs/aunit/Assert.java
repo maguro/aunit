@@ -17,6 +17,7 @@
 package com.toolazydogs.aunit;
 
 import org.antlr.runtime.Token;
+import org.antlr.runtime.tree.Tree;
 
 
 /**
@@ -24,7 +25,7 @@ import org.antlr.runtime.Token;
  */
 public class Assert
 {
-    static void assertToken(int expectedChannel, int expectedType, String expectedText, PostScan postScan)
+    static void assertToken(int expectedChannel, int expectedType, String expectedText, ScanResults scanResults)
     {
     }
 
@@ -32,7 +33,7 @@ public class Assert
     {
     }
 
-    static void assertToken(int expectedType, String expectedText, PostScan postScan)
+    static void assertToken(int expectedType, String expectedText, ScanResults scanResults)
     {
     }
 
@@ -40,7 +41,7 @@ public class Assert
     {
     }
 
-    static void assertToken(String message, int expectedChannel, int expectedType, String expectedText, PostScan postScan)
+    static void assertToken(String message, int expectedChannel, int expectedType, String expectedText, ScanResults scanResults)
     {
     }
 
@@ -48,11 +49,23 @@ public class Assert
     {
     }
 
-    static void assertToken(String message, int expectedType, String expectedText, PostScan postScan)
+    static void assertToken(String message, int expectedType, String expectedText, ScanResults scanResults)
     {
     }
 
     static void assertToken(String message, int expectedType, String expectedText, Token token)
     {
     }
+
+    static void assertTree(int rootType, String preorder, ParseResults postParse) {}
+
+    static void assertTree(int rootType, String preorder, Tree tree) {}
+
+    static void assertTree(String message, int rootType, String preorder, ParseResults postParse) {}
+
+    static void assertTree(String message, int rootType, String preorder, Tree tree) {}
+
+    static String preorder(Tree tree) {return null;}
+
+    static void refuteToken(int refutedType, ParseResults postScan) {}
 }

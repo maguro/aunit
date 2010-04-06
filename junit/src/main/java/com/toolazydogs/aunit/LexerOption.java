@@ -16,11 +16,25 @@
  */
 package com.toolazydogs.aunit;
 
+import java.util.logging.Logger;
+
+import org.antlr.runtime.Lexer;
+
 
 /**
  * @version $Revision: $ $Date: $
  */
-public interface LexerWrapper
+public class LexerOption implements Option
 {
-    ScanResults scan(String string);
+    private final Class<? extends Lexer> lexerClass;
+
+    public LexerOption(Class<? extends Lexer> lexerClass)
+    {
+        this.lexerClass = lexerClass;
+    }
+
+    public Class<? extends Lexer> getLexerClass()
+    {
+        return lexerClass;
+    }
 }

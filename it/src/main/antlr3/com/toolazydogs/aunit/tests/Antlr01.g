@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-grammar Test01;
+grammar Antlr01;
 options
 {
     output=AST;
@@ -70,7 +70,7 @@ package com.toolazydogs.aunit.tests;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-                   package com.toolazydogs.aunit.tests;
+package com.toolazydogs.aunit.tests;
 }
 @lexer::members
 {

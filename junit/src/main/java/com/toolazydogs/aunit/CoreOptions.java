@@ -17,6 +17,8 @@
 package com.toolazydogs.aunit;
 
 import static com.toolazydogs.aunit.internal.OptionUtils.expand;
+import org.antlr.runtime.Lexer;
+import org.antlr.runtime.Parser;
 
 import com.toolazydogs.aunit.internal.DefaultCompositeOption;
 
@@ -77,4 +79,25 @@ public class CoreOptions
         return composite(frameworks);
     }
 
+    /**
+     * Create a lexer option instance that indicates the lexer class used for testing.
+     *
+     * @param lexerClass the lexer class used for testing
+     * @return the lexer option instance that indicates the lexer class used for testing
+     */
+    public static Option lexer(final Class<? extends Lexer> lexerClass)
+    {
+        return new LexerOption(lexerClass);
+    }
+
+    /**
+     * Create a parser option instance that indicates the parser class used for testing.
+     *
+     * @param parserClass the parser class used for testing
+     * @return the parser option instance that indicates the parser class used for testing
+     */
+    public static Option parser(final Class<? extends Parser> parserClass)
+    {
+        return new ParserOption(parserClass);
+    }
 }

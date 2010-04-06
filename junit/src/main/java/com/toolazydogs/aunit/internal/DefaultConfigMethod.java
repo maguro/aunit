@@ -24,9 +24,9 @@ import java.util.List;
 
 import static com.toolazydogs.aunit.NullArgumentException.validateNotNull;
 
+import com.toolazydogs.aunit.AntlrConfigMethod;
 import com.toolazydogs.aunit.CompositeOption;
 import com.toolazydogs.aunit.Configuration;
-import com.toolazydogs.aunit.JUnit4ConfigMethod;
 import com.toolazydogs.aunit.Option;
 import com.toolazydogs.aunit.RequiresConfiguration;
 
@@ -37,12 +37,8 @@ import com.toolazydogs.aunit.RequiresConfiguration;
  * @author Alin Dreghiciu (adreghiciu@gmail.com)
  * @version $Revision: $ $Date: $
  */
-public class DefaultConfigMethod implements JUnit4ConfigMethod
+public class DefaultConfigMethod extends AntlrConfigMethod
 {
-    /**
-     * Configuration method. Must be a accessible method (cannot be null).
-     */
-    private final Method method;
     /**
      * Instance of the class containing the configuration method. If null then the method is supposed to be static.
      */
@@ -63,9 +59,10 @@ public class DefaultConfigMethod implements JUnit4ConfigMethod
      */
     public DefaultConfigMethod(final Method configMethod, final Object configInstance)
     {
+        super(configMethod);
+
         validateNotNull(configMethod, "Configuration method");
 
-        method = configMethod;
         this.configInstance = configInstance;
     }
 
@@ -92,7 +89,7 @@ public class DefaultConfigMethod implements JUnit4ConfigMethod
         }
         for (String requiredConfig : requiredConfigs)
         {
-            if (this.method.getName().matches(requiredConfig))
+            if (getName().matches(requiredConfig))
             {
                 return true;
             }
@@ -114,13 +111,13 @@ public class DefaultConfigMethod implements JUnit4ConfigMethod
         {
             List<Option> options = new ArrayList<Option>();
 
-            Configuration config = method.getAnnotation(Configuration.class);
+            Configuration config = getMethod().getAnnotation(Configuration.class);
             for (Class<? extends CompositeOption> option : config.extend())
             {
                 options.addAll(Arrays.asList(option.newInstance().getOptions()));
             }
 
-            options.addAll(Arrays.asList((Option[])method.invoke(configInstance)));
+            options.addAll(Arrays.asList((Option[])getMethod().invoke(configInstance)));
 
             this.options = options.toArray(new Option[options.size()]);
         }
@@ -128,4 +125,9 @@ public class DefaultConfigMethod implements JUnit4ConfigMethod
         return options;
     }
 
+    @Override
+    public String toString()
+    {
+        return getMethod().toString();
+    }
 }

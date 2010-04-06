@@ -23,23 +23,18 @@ import java.util.List;
 
 import static com.toolazydogs.aunit.NullArgumentException.validateNotNull;
 
+import com.toolazydogs.aunit.AntlrConfigMethod;
 import com.toolazydogs.aunit.AppliesTo;
 import com.toolazydogs.aunit.CompositeOption;
 import com.toolazydogs.aunit.Configuration;
-import com.toolazydogs.aunit.JUnit4ConfigMethod;
 import com.toolazydogs.aunit.Option;
 
 
 /**
  * @version $Revision: $ $Date: $
  */
-public class AppliesToConfigMethod implements JUnit4ConfigMethod
+public class AppliesToConfigMethod extends AntlrConfigMethod
 {
-
-    /**
-     * Configuration method. Must be an accessible method (cannot be null).
-     */
-    private final Method m_method;
     /**
      * Instance of the class containing the configuration method. If null then the method is supposed to be static.
      */
@@ -64,8 +59,8 @@ public class AppliesToConfigMethod implements JUnit4ConfigMethod
     public AppliesToConfigMethod(final Method configMethod,
                                  final Object configInstance)
     {
+        super(configMethod);
         validateNotNull(configMethod, "Configuration method");
-        m_method = configMethod;
         m_configInstance = configInstance;
 
         final AppliesTo appliesToAnnotation = configMethod.getAnnotation(AppliesTo.class);
@@ -113,14 +108,13 @@ public class AppliesToConfigMethod implements JUnit4ConfigMethod
      *                                - Re-thrown, from invoking the configuration method via reflection
      * @throws InstantiationException - Re-thrown, from invoking the configuration method via reflection
      */
-    public Option[] getOptions()
-            throws IllegalAccessException, InvocationTargetException, InstantiationException
+    public Option[] getOptions() throws IllegalAccessException, InvocationTargetException, InstantiationException
     {
         if (m_options == null)
         {
             List<Option> options = new ArrayList<Option>();
 
-            Configuration config = m_method.getAnnotation(Configuration.class);
+            Configuration config = getMethod().getAnnotation(Configuration.class);
             for (Class<? extends CompositeOption> option : config.extend())
             {
                 for (Option o : option.newInstance().getOptions())
@@ -129,7 +123,7 @@ public class AppliesToConfigMethod implements JUnit4ConfigMethod
                 }
             }
 
-            for (Option o : (Option[])m_method.invoke(m_configInstance))
+            for (Option o : (Option[])getMethod().invoke(m_configInstance))
             {
                 options.add(o);
             }
@@ -139,4 +133,17 @@ public class AppliesToConfigMethod implements JUnit4ConfigMethod
         return m_options;
     }
 
+    public void validatePublicVoidNoArg(List<Throwable> errors)
+    {
+        final Method m = getMethod();
+        Util.validateIsStatic(m, errors);
+        Util.validatePublicNoArg(m, errors);
+        Util.validatePrimitiveArray(m, Option.class, errors);
+    }
+
+    @Override
+    public String toString()
+    {
+        return getMethod().toString();
+    }
 }

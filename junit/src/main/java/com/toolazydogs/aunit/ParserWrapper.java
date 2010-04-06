@@ -16,31 +16,13 @@
  */
 package com.toolazydogs.aunit;
 
-import java.lang.reflect.Method;
+import java.util.logging.Logger;
 
 
 /**
- * A source of configuration options.
- *
- * @author Alin Dreghiciu (adreghiciu@gmail.com)
  * @version $Revision: $ $Date: $
  */
-public interface JUnit4ConfigMethod
+public interface ParserWrapper
 {
-    /**
-     * Returns true if the configuration method matches (applies) to the test method about to be run.
-     *
-     * @param testMethod test method that is about to be run
-     * @return tru, if the configuration method applies to the test method
-     */
-    boolean matches(Method testMethod);
-
-    /**
-     * Returns an array of options.
-     *
-     * @return array of options (cannot be null)
-     * @throws Exception - If determining the options fails
-     */
-    Option[] getOptions() throws Exception;
-
+    void parse(String s);
 }
