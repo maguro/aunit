@@ -21,6 +21,7 @@ import org.antlr.runtime.tree.Tree;
 
 
 /**
+ * @author Jeremy D. Frens (jdfrens@users.sourceforge.net)
  * @version $Revision: $ $Date: $
  */
 public class Assert
