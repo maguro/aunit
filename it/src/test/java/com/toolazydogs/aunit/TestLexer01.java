@@ -26,8 +26,8 @@ import static com.toolazydogs.aunit.Work.scan;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import com.toolazydogs.aunit.tests.Antlr01Lexer;
-import com.toolazydogs.aunit.tests.Antlr01Parser;
+import com.toolazydogs.aunit.tests.CMinusLexer;
+import com.toolazydogs.aunit.tests.CMinusParser;
 
 
 /**
@@ -40,15 +40,15 @@ public class TestLexer01
     public static Option[] configure()
     {
         return options(
-                lexer(Antlr01Lexer.class),
-                parser(Antlr01Parser.class)
+                lexer(CMinusLexer.class),
+                parser(CMinusParser.class)
         );
     }
 
     @Test
     public void test() throws Exception
     {
-        assertToken(Antlr01Lexer.NAME, "abc", scan("abc"));
-        assertTree(Antlr01Parser.STATEMENT, "(+ 1 2)", parse("statement", "1 + 2"));
+        assertToken(CMinusLexer.ID, "abc", scan("abc"));
+        assertTree(CMinusParser.EXPR, "(+ 1 2)", parse("addExpression", "1 + 2"));
     }
 }

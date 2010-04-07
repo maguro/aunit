@@ -3,3 +3,9 @@
 ==  Version 2.0, in this case for the ANTLR JUnit distribution.        ==
 =========================================================================
 
+The ANTLR JUnit distribution build relies on source files supplied by the
+book "The Definitive ANTLR Reference: Building Domain-Specific Languages".
+The following notice covers the files:
+
+Copyright © 2007 Terence Parr.
+All rights reserved.
