@@ -35,7 +35,7 @@ import com.toolazydogs.aunit.tests.CMinusParser;
  * @version $Revision: $ $Date: $
  */
 @RunWith(AntlrTestRunner.class)
-public class CMinusTest implements Opcodes
+public class CMinusTest
 {
     @Configuration
     public static Option[] configure()
