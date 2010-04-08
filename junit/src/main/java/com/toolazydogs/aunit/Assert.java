@@ -18,6 +18,8 @@ package com.toolazydogs.aunit;
 
 import org.antlr.runtime.Token;
 import org.antlr.runtime.tree.Tree;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 
 /**
@@ -38,8 +40,10 @@ public class Assert
     {
     }
 
-    static void assertToken(int expectedType, String expectedText, org.antlr.runtime.Token token)
+    static void assertToken(int expectedType, String expectedText, Token token)
     {
+        assertEquals("failed to match token types,", expectedType, token.getType());
+        assertEquals("failed to match token text,", expectedText, token.getText());
     }
 
     static void assertToken(String message, int expectedChannel, int expectedType, String expectedText, ScanResults scanResults)
@@ -60,7 +64,12 @@ public class Assert
 
     static void assertTree(int rootType, String preorder, ParseResults postParse) {}
 
-    static void assertTree(int rootType, String preorder, Tree tree) {}
+    static void assertTree(int rootType, String preorder, Tree tree)
+    {
+        assertNotNull("tree should be non-null", tree);
+//        assertEquals(preorder, preorder(tree));
+        assertEquals(rootType, tree.getType());
+    }
 
     static void assertTree(String message, int rootType, String preorder, ParseResults postParse) {}
 

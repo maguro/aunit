@@ -16,31 +16,30 @@
  */
 package com.toolazydogs.aunit.internal;
 
-import java.util.List;
-
-import org.junit.runners.model.FrameworkMethod;
-import org.junit.runners.model.Statement;
+import org.antlr.runtime.RecognizerSharedState;
+import org.antlr.runtime.tree.TreeNodeStream;
+import org.antlr.runtime.tree.TreeParser;
 
 
 /**
  * @version $Revision: $ $Date: $
  */
-public class RunBefores extends Statement
+public class TreeParserFactory
 {
-    private final Statement next;
-    private final List<? extends Statement> befores;
+    private final Class<? extends TreeParser> treeParserClass;
 
-    public RunBefores(Statement next, List<? extends Statement> befores)
+    public TreeParserFactory(Class<? extends TreeParser> treeParserClass)
     {
-        this.next = next;
-        this.befores = befores;
+        this.treeParserClass = treeParserClass;
     }
 
-    @Override
-    public void evaluate() throws Throwable
+    public TreeParser generate(TreeNodeStream input)
     {
-        for (Statement before : befores) before.evaluate();
+        return null;
+    }
 
-        next.evaluate();
+    public TreeParser generate(TreeNodeStream input, RecognizerSharedState state)
+    {
+        return null;
     }
 }

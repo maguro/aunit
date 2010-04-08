@@ -16,31 +16,28 @@
  */
 package com.toolazydogs.aunit.internal;
 
-import java.util.List;
-
-import org.junit.runners.model.FrameworkMethod;
-import org.junit.runners.model.Statement;
+import java.util.logging.Logger;
 
 
 /**
  * @version $Revision: $ $Date: $
  */
-public class RunBefores extends Statement
+public class AunitClassloader extends ClassLoader
 {
-    private final Statement next;
-    private final List<? extends Statement> befores;
+    private final static String CLASS_NAME = AunitClassloader.class.getName();
+    private final static Logger LOGGER = Logger.getLogger(CLASS_NAME);
 
-    public RunBefores(Statement next, List<? extends Statement> befores)
+    public AunitClassloader(ClassLoader parent)
     {
-        this.next = next;
-        this.befores = befores;
+        super(parent);
     }
 
-    @Override
-    public void evaluate() throws Throwable
+    public AunitClassloader()
     {
-        for (Statement before : befores) before.evaluate();
+    }
 
-        next.evaluate();
+    public Class defineClass(String name, byte[] b)
+    {
+        return defineClass(name, b, 0, b.length);
     }
 }

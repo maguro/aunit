@@ -16,7 +16,6 @@
  */
 package com.toolazydogs.aunit;
 
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -24,7 +23,6 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
-import org.antlr.runtime.Lexer;
 import org.junit.runners.BlockJUnit4ClassRunner;
 import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.InitializationError;
@@ -32,6 +30,7 @@ import org.junit.runners.model.Statement;
 
 import com.toolazydogs.aunit.internal.AntlrConfigMethods;
 import com.toolazydogs.aunit.internal.DefaultCompositeOption;
+import com.toolazydogs.aunit.internal.RunAfters;
 import com.toolazydogs.aunit.internal.RunBefores;
 
 
@@ -42,9 +41,13 @@ import com.toolazydogs.aunit.internal.RunBefores;
  */
 public class AntlrTestRunner extends BlockJUnit4ClassRunner
 {
+    private final List<AntlrConfigMethod> configMethods;
+
     public AntlrTestRunner(Class<?> klass) throws InitializationError
     {
         super(klass);
+
+        configMethods = getConfigurationMethods();
     }
 
     protected void collectInitializationErrors(List<Throwable> errors)
@@ -71,23 +74,45 @@ public class AntlrTestRunner extends BlockJUnit4ClassRunner
     }
 
     /**
-     * Returns a {@link org.junit.runners.model.Statement}: run all non-overridden {@code @BeforeClass} methods on this class
-     * and superclasses before executing {@code statement}; if any throws an
-     * Exception, stop execution and pass the exception on.
+     * Returns a {@link Statement}: run all non-overridden {@code @Before}
+     * methods on this class and super classes before running {@code next}; if
+     * any throws an Exception, stop execution and pass the exception on.
      */
-    protected Statement withBeforeClasses(Statement statement)
+    protected Statement withBefores(FrameworkMethod method, Object target, Statement statement)
     {
+        List<Statement> befores = new ArrayList<Statement>();
         try
         {
-            final List<? extends FrameworkMethod> configMethods = getConfigurationMethods();
-
-            statement = new RunBefores(super.withBeforeClasses(statement), configMethods, null);
+            Option option = getOptions(method.getMethod(), configMethods);
+            befores.add(option.generateSetupStatement());
         }
-        catch (Exception ignore)
+        catch (Exception e)
         {
+            e.printStackTrace();  //Todo change body of catch statement use File | Settings | File Templates.
         }
+        return new RunBefores(super.withBefores(method, target, statement), befores);
+    }
 
-        return statement;
+    /**
+     * Returns a {@link Statement}: run all non-overridden {@code @After}
+     * methods on this class and super classes before running {@code next}; all
+     * After methods are always executed: exceptions thrown by previous steps
+     * are combined, if necessary, with exceptions from After methods into a
+     * {@link org.junit.internal.runners.model.MultipleFailureException}.
+     */
+    protected Statement withAfters(FrameworkMethod method, Object target, Statement statement)
+    {
+        List<Statement> afters = new ArrayList<Statement>();
+        try
+        {
+            Option option = getOptions(method.getMethod(), configMethods);
+            afters.add(option.generateTeardownStatement());
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();  //Todo change body of catch statement use File | Settings | File Templates.
+        }
+        return new RunAfters(super.withAfters(method, target, statement), afters);
     }
 
     /**

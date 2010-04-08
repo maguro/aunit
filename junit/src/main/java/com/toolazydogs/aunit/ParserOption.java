@@ -17,6 +17,9 @@
 package com.toolazydogs.aunit;
 
 import org.antlr.runtime.Parser;
+import org.junit.runners.model.Statement;
+
+import com.toolazydogs.aunit.internal.ParserFactory;
 
 
 /**
@@ -25,6 +28,7 @@ import org.antlr.runtime.Parser;
 public class ParserOption implements Option
 {
     private final Class<? extends Parser> parserClass;
+    private boolean failOnError = false;
 
     public ParserOption(Class<? extends Parser> parserClass)
     {
@@ -34,5 +38,46 @@ public class ParserOption implements Option
     public Class<? extends Parser> getParserClass()
     {
         return parserClass;
+    }
+
+    public boolean isFailOnError()
+    {
+        return failOnError;
+    }
+
+    public ParserOption failOnError()
+    {
+        failOnError = true;
+        return this;
+    }
+
+    public ParserOption failOnError(boolean fail)
+    {
+        failOnError = fail;
+        return this;
+    }
+
+    public Statement generateSetupStatement()
+    {
+        return new Statement()
+        {
+            @Override
+            public void evaluate() throws Throwable
+            {
+                AunitRuntime.setParserFactory(new ParserFactory(parserClass));
+            }
+        };
+    }
+
+    public Statement generateTeardownStatement()
+    {
+        return new Statement()
+        {
+            @Override
+            public void evaluate() throws Throwable
+            {
+                AunitRuntime.setParserFactory(null);
+            }
+        };
     }
 }

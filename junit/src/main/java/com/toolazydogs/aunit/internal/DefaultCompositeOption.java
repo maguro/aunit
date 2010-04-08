@@ -20,6 +20,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.junit.runners.model.Statement;
+
 import com.toolazydogs.aunit.CompositeOption;
 import com.toolazydogs.aunit.Option;
 
@@ -27,8 +29,7 @@ import com.toolazydogs.aunit.Option;
 /**
  * @version $Revision: $ $Date: $
  */
-public class DefaultCompositeOption
-        implements CompositeOption
+public class DefaultCompositeOption implements CompositeOption
 {
 
     /**
@@ -91,4 +92,39 @@ public class DefaultCompositeOption
         return sb.toString();
     }
 
+    public Statement generateSetupStatement()
+    {
+        return new Statement()
+        {
+            final List<Statement> statements = new ArrayList<Statement>();
+
+            {
+                for (Option option : m_options) statements.add(option.generateSetupStatement());
+            }
+
+            @Override
+            public void evaluate() throws Throwable
+            {
+                for (Statement statement : statements) statement.evaluate();
+            }
+        };
+    }
+
+    public Statement generateTeardownStatement()
+    {
+        return new Statement()
+        {
+            final List<Statement> statements = new ArrayList<Statement>();
+
+            {
+                for (Option option : m_options) statements.add(option.generateTeardownStatement());
+            }
+
+            @Override
+            public void evaluate() throws Throwable
+            {
+                for (Statement statement : statements) statement.evaluate();
+            }
+        };
+    }
 }

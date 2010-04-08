@@ -14,9 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.toolazydogs.aunit;
+package com.toolazydogs.aunit.internal;
 
-import java.util.logging.Logger;
+import java.util.List;
 
 
 /**
@@ -24,5 +24,9 @@ import java.util.logging.Logger;
  */
 public interface ParserWrapper
 {
-    void parse(String s);
+    List<String> getErrors();
+
+    boolean isFailOnError();
+
+    void setFailOnError(boolean failOnError);
 }

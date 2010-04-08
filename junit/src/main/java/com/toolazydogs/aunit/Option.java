@@ -16,6 +16,9 @@
  */
 package com.toolazydogs.aunit;
 
+import org.junit.runners.model.Statement;
+
+
 /**
  * Marker interface for integration test user specified options.
  *
@@ -24,4 +27,7 @@ package com.toolazydogs.aunit;
  */
 public interface Option
 {
+    Statement generateSetupStatement();
+
+    Statement generateTeardownStatement();
 }

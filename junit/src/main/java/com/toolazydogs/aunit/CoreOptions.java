@@ -69,23 +69,12 @@ public class CoreOptions
     }
 
     /**
-     * Creates a composite option of {@link FrameworkOption}s.
-     *
-     * @param frameworks framework options
-     * @return composite option of framework options
-     */
-    public static Option frameworks(final FrameworkOption... frameworks)
-    {
-        return composite(frameworks);
-    }
-
-    /**
      * Create a lexer option instance that indicates the lexer class used for testing.
      *
      * @param lexerClass the lexer class used for testing
      * @return the lexer option instance that indicates the lexer class used for testing
      */
-    public static Option lexer(final Class<? extends Lexer> lexerClass)
+    public static LexerOption lexer(final Class<? extends Lexer> lexerClass)
     {
         return new LexerOption(lexerClass);
     }
@@ -96,7 +85,7 @@ public class CoreOptions
      * @param parserClass the parser class used for testing
      * @return the parser option instance that indicates the parser class used for testing
      */
-    public static Option parser(final Class<? extends Parser> parserClass)
+    public static ParserOption parser(final Class<? extends Parser> parserClass)
     {
         return new ParserOption(parserClass);
     }

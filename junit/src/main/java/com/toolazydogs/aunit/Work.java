@@ -16,6 +16,13 @@
  */
 package com.toolazydogs.aunit;
 
+import java.lang.reflect.Method;
+
+import org.antlr.runtime.ANTLRStringStream;
+import org.antlr.runtime.CommonTokenStream;
+import org.antlr.runtime.Lexer;
+import org.antlr.runtime.Parser;
+import org.antlr.runtime.RuleReturnScope;
 import org.antlr.runtime.Token;
 import org.antlr.runtime.tree.Tree;
 
@@ -25,13 +32,23 @@ import org.antlr.runtime.tree.Tree;
  */
 public class Work
 {
-    public static Token scan(String characters)
+    public static Token scan(String characters) throws Exception
     {
-        return null;
+        if (characters == null) throw new IllegalArgumentException("Characters cannot be null");
+
+        Lexer lexer = AunitRuntime.getLexerFactory().generate(new ANTLRStringStream(characters));
+        return lexer.nextToken();
     }
 
-    public static Tree parse(String production, String stream)
+    public static Tree parse(String stream, String production, Object... arguments) throws Exception
     {
-        return null;
+        if (stream == null) throw new IllegalArgumentException("Stream cannot be null");
+        if (production == null) throw new IllegalArgumentException("Production name cannot be null");
+
+        Lexer lexer = AunitRuntime.getLexerFactory().generate(new ANTLRStringStream(stream));
+        Parser parser = AunitRuntime.getParserFactory().generate(new CommonTokenStream(lexer));
+
+        Method m = parser.getClass().getMethod(production);
+        return (Tree)((RuleReturnScope)m.invoke(parser)).getTree();
     }
 }

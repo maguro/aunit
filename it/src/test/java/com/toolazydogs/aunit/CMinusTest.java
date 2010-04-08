@@ -25,6 +25,7 @@ import static com.toolazydogs.aunit.Work.parse;
 import static com.toolazydogs.aunit.Work.scan;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.objectweb.asm.Opcodes;
 
 import com.toolazydogs.aunit.tests.CMinusLexer;
 import com.toolazydogs.aunit.tests.CMinusParser;
@@ -34,14 +35,14 @@ import com.toolazydogs.aunit.tests.CMinusParser;
  * @version $Revision: $ $Date: $
  */
 @RunWith(AntlrTestRunner.class)
-public class TestLexer01
+public class CMinusTest implements Opcodes
 {
     @Configuration
     public static Option[] configure()
     {
         return options(
-                lexer(CMinusLexer.class),
-                parser(CMinusParser.class)
+                lexer(CMinusLexer.class).failOnError(),
+                parser(CMinusParser.class).failOnError()
         );
     }
 
@@ -49,6 +50,7 @@ public class TestLexer01
     public void test() throws Exception
     {
         assertToken(CMinusLexer.ID, "abc", scan("abc"));
-        assertTree(CMinusParser.EXPR, "(+ 1 2)", parse("addExpression", "1 + 2"));
+
+        assertTree(CMinusParser.EXPR, "(+ 1 2)", parse("1 + 2", "expression"));
     }
 }

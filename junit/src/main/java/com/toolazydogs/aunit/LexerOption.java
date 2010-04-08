@@ -16,9 +16,10 @@
  */
 package com.toolazydogs.aunit;
 
-import java.util.logging.Logger;
-
 import org.antlr.runtime.Lexer;
+import org.junit.runners.model.Statement;
+
+import com.toolazydogs.aunit.internal.LexerFactory;
 
 
 /**
@@ -27,6 +28,7 @@ import org.antlr.runtime.Lexer;
 public class LexerOption implements Option
 {
     private final Class<? extends Lexer> lexerClass;
+    private boolean failOnError = false;
 
     public LexerOption(Class<? extends Lexer> lexerClass)
     {
@@ -36,5 +38,46 @@ public class LexerOption implements Option
     public Class<? extends Lexer> getLexerClass()
     {
         return lexerClass;
+    }
+
+    public boolean isFailOnError()
+    {
+        return failOnError;
+    }
+
+    public LexerOption failOnError()
+    {
+        failOnError = true;
+        return this;
+    }
+
+    public LexerOption failOnError(boolean fail)
+    {
+        failOnError = fail;
+        return this;
+    }
+
+    public Statement generateSetupStatement()
+    {
+        return new Statement()
+        {
+            @Override
+            public void evaluate() throws Throwable
+            {
+                AunitRuntime.setLexerFactory(new LexerFactory(lexerClass));
+            }
+        };
+    }
+
+    public Statement generateTeardownStatement()
+    {
+        return new Statement()
+        {
+            @Override
+            public void evaluate() throws Throwable
+            {
+                AunitRuntime.setLexerFactory(null);
+            }
+        };
     }
 }
