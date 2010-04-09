@@ -23,12 +23,12 @@ import org.antlr.runtime.TokenSource;
 /**
  * @version $Revision: $ $Date: $
  */
-public class ScanResults
+public class LexerResults
 {
     private final TokenSource tokenSource;
     private final Token token;
 
-    public ScanResults(TokenSource tokenSource)
+    public LexerResults(TokenSource tokenSource)
     {
         this.tokenSource = tokenSource;
         this.token = tokenSource.nextToken();

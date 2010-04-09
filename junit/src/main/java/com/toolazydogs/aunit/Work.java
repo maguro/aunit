@@ -31,12 +31,12 @@ import org.antlr.runtime.tree.Tree;
  */
 public class Work
 {
-    public static ScanResults scan(String characters) throws Exception
+    public static LexerResults scan(String characters) throws Exception
     {
         if (characters == null) throw new IllegalArgumentException("Characters cannot be null");
 
         Lexer lexer = AunitRuntime.getLexerFactory().generate(new ANTLRStringStream(characters));
-        return new ScanResults(lexer);
+        return new LexerResults(lexer);
     }
 
     public static Tree parse(String stream, String production, Object... arguments) throws Exception

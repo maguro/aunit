@@ -16,12 +16,16 @@
  */
 package com.toolazydogs.aunit;
 
+import junit.framework.AssertionFailedError;
 import org.antlr.runtime.BaseRecognizer;
 import org.antlr.runtime.Token;
 import org.antlr.runtime.tree.Tree;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.fail;
+
+import com.toolazydogs.aunit.internal.PreorderException;
+import com.toolazydogs.aunit.internal.PreorderStream;
 
 
 /**
@@ -36,12 +40,12 @@ public class Assert
      * @param message      the message to display on failure.
      * @param expectedType the expected type of the token.
      * @param expectedText the expected text of the token.
-     * @param lexerResults the result of {@link ANTLRTester#scanInput(String)} which will
+     * @param lexerResults the result of {@link Work#scan(String)} which will
      *                     produce the token to assert.
      */
     public static void assertToken(String message, int expectedType, String expectedText, LexerResults lexerResults)
     {
-        assertToken(message, expectedType, expectedText, lexerResults.getSingleToken());
+        assertToken(message, expectedType, expectedText, lexerResults.getToken());
     }
 
     /**
@@ -51,12 +55,12 @@ public class Assert
      * @param expectedChannel the channel the token should appear on.
      * @param expectedType    the expected type of the token.
      * @param expectedText    the expected text of the token.
-     * @param lexerResults    the result of {@link ANTLRTester#scanInput(String)} which will
+     * @param lexerResults    the result of {@link Work#scan(String)} which will
      *                        produce the token to assert.
      */
     public static void assertToken(String message, int expectedChannel, int expectedType, String expectedText, LexerResults lexerResults)
     {
-        assertToken(message, expectedChannel, expectedType, expectedText, lexerResults.getSingleToken());
+        assertToken(message, expectedChannel, expectedType, expectedText, lexerResults.getToken());
     }
 
     /**
@@ -64,12 +68,12 @@ public class Assert
      *
      * @param expectedType the expected type of the token.
      * @param expectedText the expected text of the token.
-     * @param lexerResults the result of {@link ANTLRTester#scanInput(String)} which will
+     * @param lexerResults the result of {@link Work#scan(String)} which will
      *                     produce the token to assert.
      */
     public static void assertToken(int expectedType, String expectedText, LexerResults lexerResults)
     {
-        assertToken(expectedType, expectedText, lexerResults.getSingleToken());
+        assertToken(expectedType, expectedText, lexerResults.getToken());
     }
 
     /**
@@ -83,7 +87,7 @@ public class Assert
      */
     public static void assertToken(int expectedChannel, int expectedType, String expectedText, LexerResults lexerResults)
     {
-        assertToken(expectedChannel, expectedType, expectedText, lexerResults.getSingleToken());
+        assertToken(expectedChannel, expectedType, expectedText, lexerResults.getToken());
     }
 
     /**
@@ -160,7 +164,7 @@ public class Assert
     {
         try
         {
-            if (refutedType == lexerResults.getSingleToken().getType())
+            if (refutedType == lexerResults.getToken().getType())
             {
                 fail("scanned successfully as specified type");
             }
@@ -238,7 +242,7 @@ public class Assert
     public static void assertTree(int rootType, String preorder, Tree tree)
     {
         assertNotNull("tree should be non-null", tree);
-        assertEquals(preorder, preorder(tree));
+        assertPreordered("asserting preorder", preorder, tree);
         assertEquals(rootType, tree.getType());
     }
 
@@ -250,8 +254,7 @@ public class Assert
      * @param preorder     the preorder traversal of the tree.
      * @param parseResults a helper class
      */
-    public static void assertTree(String message, int rootType,
-                                  String preorder, ParseResults parseResults)
+    public static void assertTree(String message, int rootType, String preorder, ParseResults parseResults)
     {
         assertTree(message, rootType, preorder, parseResults.getTree());
     }
@@ -268,47 +271,52 @@ public class Assert
     {
         assertNotNull("tree should be non-null", tree);
         assertEquals(message + " (asserting type of root)", rootType, tree.getType());
-        assertEquals(message + " (asserting preorder)", preorder, preorder(tree));
+        assertPreordered(message + " (asserting preorder)", preorder, tree);
     }
 
-    /**
-     * Generates a preorder traversal of an ANTLR tree. In general, each tree
-     * and subtree in the preorder output is parenthesized (even leaves). The
-     * text of the AST (or token) is used to get the string to add to the
-     * preorder traversal.
-     * <p/>
-     * <p/>
-     * There are two degenerate cases:
-     * <ul>
-     * <li> <code>"<NULL!!!!>"</code> is returned when <code>tree</code> itself
-     * is <code>null</code>.</li>
-     * <li> <code>"<nil>"</code> is returned when <code>tree</code> is nil.</li>
-     * </ul>
-     *
-     * @param tree the tree to traverse.
-     * @return the preorder representation of the tree.
-     */
-    public static String preorder(Tree tree)
+    private static void assertPreordered(String message, String preorder, Tree tree)
     {
-        if (tree == null)
+        try
         {
-            return "<NULL!!!!>";
+            PreorderStream stream = new PreorderStream(preorder);
+            assertPreordered(message, stream, tree);
+            stream.done();
         }
-        else if (tree.isNil())
+        catch (PreorderException e)
         {
-            return "<nil>";
+            throw new AssertionFailedError(message + " " + e.getMessage());
         }
-        else
+    }
+
+    private static void assertPreordered(String message, PreorderStream preorder, Tree tree)
+    {
+        try
         {
-            StringBuilder builder = new StringBuilder();
-            builder.append("(");
-            builder.append(tree.getText());
-            for (int i = 0; i < tree.getChildCount(); i++)
+            if (tree == null)
             {
-                builder.append(preorder(tree.getChild(i)));
+                assertEquals(message, preorder.token(), "<NULL!!!!>");
             }
-            builder.append(")");
-            return builder.toString();
+            else if (tree.isNil())
+            {
+                assertEquals(message, preorder.token(), "<nil>");
+            }
+            else
+            {
+                preorder.leftparen();
+
+                assertEquals(message, preorder.token(), tree.getText());
+
+                for (int i = 0; i < tree.getChildCount(); i++)
+                {
+                    assertPreordered(message, preorder, tree.getChild(i));
+                }
+
+                preorder.rightparen();
+            }
+        }
+        catch (PreorderException e)
+        {
+            throw new AssertionFailedError(message + " " + e.getMessage());
         }
     }
 

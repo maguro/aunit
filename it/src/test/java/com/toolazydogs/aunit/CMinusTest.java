@@ -50,6 +50,6 @@ public class CMinusTest
     {
         assertToken(CMinusLexer.ID, "abc", scan("abc"));
 
-        assertTree(CMinusParser.EXPR, "(EXPR(+(1)(2)))", parse("1 + 2", "expression"));
+        assertTree(CMinusParser.EXPR, "(EXPR (+ (1) (2)))", parse("1 + 2", "expression"));
     }
 }
