@@ -18,7 +18,6 @@ package com.toolazydogs.aunit.internal;
 
 import java.util.List;
 
-import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.Statement;
 
 

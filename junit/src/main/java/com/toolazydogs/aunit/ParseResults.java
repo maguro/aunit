@@ -16,7 +16,7 @@
  */
 package com.toolazydogs.aunit;
 
-import java.util.logging.Logger;
+import org.antlr.runtime.tree.Tree;
 
 
 /**
@@ -24,6 +24,10 @@ import java.util.logging.Logger;
  */
 public class ParseResults
 {
-    private final static String CLASS_NAME = ParseResults.class.getName();
-    private final static Logger LOGGER = Logger.getLogger(CLASS_NAME);
+    private Tree tree;
+
+    public Tree getTree()
+    {
+        return tree;
+    }
 }

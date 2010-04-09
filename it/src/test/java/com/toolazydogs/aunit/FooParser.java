@@ -19,7 +19,6 @@ package com.toolazydogs.aunit;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.antlr.runtime.RecognitionException;
 import org.antlr.runtime.RecognizerSharedState;
 import org.antlr.runtime.TokenStream;
 

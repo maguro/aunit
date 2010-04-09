@@ -25,7 +25,6 @@ import static com.toolazydogs.aunit.Work.parse;
 import static com.toolazydogs.aunit.Work.scan;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.objectweb.asm.Opcodes;
 
 import com.toolazydogs.aunit.tests.CMinusLexer;
 import com.toolazydogs.aunit.tests.CMinusParser;
@@ -51,6 +50,6 @@ public class CMinusTest
     {
         assertToken(CMinusLexer.ID, "abc", scan("abc"));
 
-        assertTree(CMinusParser.EXPR, "(+ 1 2)", parse("1 + 2", "expression"));
+        assertTree(CMinusParser.EXPR, "(EXPR(+(1)(2)))", parse("1 + 2", "expression"));
     }
 }

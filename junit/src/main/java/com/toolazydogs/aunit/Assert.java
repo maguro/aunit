@@ -16,10 +16,12 @@
  */
 package com.toolazydogs.aunit;
 
+import org.antlr.runtime.BaseRecognizer;
 import org.antlr.runtime.Token;
 import org.antlr.runtime.tree.Tree;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.fail;
 
 
 /**
@@ -28,54 +30,287 @@ import static org.junit.Assert.assertNotNull;
  */
 public class Assert
 {
-    static void assertToken(int expectedChannel, int expectedType, String expectedText, ScanResults scanResults)
+    /**
+     * Asserts the token produced by an ANTLR tester.
+     *
+     * @param message      the message to display on failure.
+     * @param expectedType the expected type of the token.
+     * @param expectedText the expected text of the token.
+     * @param lexerResults the result of {@link ANTLRTester#scanInput(String)} which will
+     *                     produce the token to assert.
+     */
+    public static void assertToken(String message, int expectedType, String expectedText, LexerResults lexerResults)
     {
+        assertToken(message, expectedType, expectedText, lexerResults.getSingleToken());
     }
 
-    static void assertToken(int expectedChannel, int expectedType, String expectedText, Token token)
+    /**
+     * Asserts the token produced by an ANTLR tester.
+     *
+     * @param message         the message to display on failure.
+     * @param expectedChannel the channel the token should appear on.
+     * @param expectedType    the expected type of the token.
+     * @param expectedText    the expected text of the token.
+     * @param lexerResults    the result of {@link ANTLRTester#scanInput(String)} which will
+     *                        produce the token to assert.
+     */
+    public static void assertToken(String message, int expectedChannel, int expectedType, String expectedText, LexerResults lexerResults)
     {
+        assertToken(message, expectedChannel, expectedType, expectedText, lexerResults.getSingleToken());
     }
 
-    static void assertToken(int expectedType, String expectedText, ScanResults scanResults)
+    /**
+     * Asserts the token produced by an ANTLR tester.
+     *
+     * @param expectedType the expected type of the token.
+     * @param expectedText the expected text of the token.
+     * @param lexerResults the result of {@link ANTLRTester#scanInput(String)} which will
+     *                     produce the token to assert.
+     */
+    public static void assertToken(int expectedType, String expectedText, LexerResults lexerResults)
     {
+        assertToken(expectedType, expectedText, lexerResults.getSingleToken());
     }
 
-    static void assertToken(int expectedType, String expectedText, Token token)
+    /**
+     * Asserts the token produced by an ANTLR tester.
+     *
+     * @param expectedChannel the channel the token should appear on.
+     * @param expectedType    the expected type of the token.
+     * @param expectedText    the expected text of the token.
+     * @param lexerResults    the result of {@link Work#scan(String)} which will
+     *                        produce the token to assert.
+     */
+    public static void assertToken(int expectedChannel, int expectedType, String expectedText, LexerResults lexerResults)
     {
+        assertToken(expectedChannel, expectedType, expectedText, lexerResults.getSingleToken());
+    }
+
+    /**
+     * Asserts properties of a token.
+     *
+     * @param message      the message to display on failure.
+     * @param expectedType the expected type of the token.
+     * @param expectedText the expected text of the token.
+     * @param token        the token to assert.
+     */
+    public static void assertToken(String message, int expectedType, String expectedText, Token token)
+    {
+        assertToken(message, BaseRecognizer.DEFAULT_TOKEN_CHANNEL, expectedType, expectedText, token);
+    }
+
+    /**
+     * Asserts properties of a token.
+     *
+     * @param message         the message to display on failure.
+     * @param expectedChannel the channel the token should appear on.
+     * @param expectedType    the expected type of the token.
+     * @param expectedText    the expected text of the token.
+     * @param token           the token to assert.
+     */
+    public static void assertToken(String message, int expectedChannel, int expectedType, String expectedText, Token token)
+    {
+        assertEquals(message + " (channel check)", expectedChannel, token.getChannel());
+        assertEquals(message + " (type check)", expectedType, token.getType());
+        assertEquals(message + " (text check)", expectedText, token.getText());
+    }
+
+    /**
+     * Asserts properties of a token.
+     *
+     * @param expectedType the expected type of the token.
+     * @param expectedText the expected text of the token.
+     * @param token        the token to assert.
+     */
+    public static void assertToken(int expectedType, String expectedText, Token token)
+    {
+        assertToken(BaseRecognizer.DEFAULT_TOKEN_CHANNEL, expectedType, expectedText, token);
+    }
+
+    /**
+     * Asserts properties of a token.
+     *
+     * @param expectedChannel the channel the token should appear on.
+     * @param expectedType    the expected type of the token.
+     * @param expectedText    the expected text of the token.
+     * @param token           the token to assert.
+     */
+    public static void assertToken(int expectedChannel, int expectedType, String expectedText, Token token)
+    {
+        assertEquals(expectedChannel, token.getChannel());
         assertEquals("failed to match token types,", expectedType, token.getType());
         assertEquals("failed to match token text,", expectedText, token.getText());
     }
 
-    static void assertToken(String message, int expectedChannel, int expectedType, String expectedText, ScanResults scanResults)
+    /**
+     * To "refute" a token means to assert that it cannot be of the specified
+     * type. This is useful, for example, when you want to assert that "x" will
+     * not be recognized as an integer. Eventually, it may be recognized as an
+     * identifier or some other token, but you just want to assert that it's
+     * definitely not an integer.
+     * <p/>
+     * <pre>
+     * refuteToken(MyLexer.INTEGER, myTester.scanInput(&quot;x&quot;));
+     * </pre>
+     *
+     * @param refutedType  the type the token should <em>not</em> be.
+     * @param lexerResults the result of scanning input with the tester.
+     */
+    public static void refuteToken(int refutedType, LexerResults lexerResults)
     {
+        try
+        {
+            if (refutedType == lexerResults.getSingleToken().getType())
+            {
+                fail("scanned successfully as specified type");
+            }
+        }
+        catch (AssertionError e)
+        {
+            if (checkMessage(e.getMessage()))
+            {
+                // things are good
+            }
+            else
+            {
+                throw e;
+            }
+        }
     }
 
-    static void assertToken(String message, int expectedChannel, int expectedType, String expectedText, Token token)
+    /**
+     * To "refute" a parse means that the scan cannot be parsed with the
+     * specified production.
+     * <p/>
+     * <pre>
+     * refuteParse(&quot;program&quot;, myTester.scanInput(&quot;5 / * 8&quot;));
+     * </pre>
+     *
+     * @param production   the production to apply from the parser.
+     * @param lexerResults the result of scanning input with the tester.
+     */
+    public static void refuteParse(String production, LexerResults lexerResults)
     {
+        try
+        {
+            lexerResults.parseAs(production);
+            fail("parsed as " + production);
+        }
+        catch (AssertionError e)
+        {
+            if (checkMessage(e.getMessage()))
+            {
+                // things are good
+            }
+            else
+            {
+                throw e;
+            }
+        }
     }
 
-    static void assertToken(String message, int expectedType, String expectedText, ScanResults scanResults)
+    private static boolean checkMessage(String message)
     {
+        return message.startsWith("failed to match EOF")
+               || message.startsWith("unexpected error output")
+               || message.startsWith("parsing does not consume all tokens");
     }
 
-    static void assertToken(String message, int expectedType, String expectedText, Token token)
+    /**
+     * Asserts a parse tree.
+     *
+     * @param rootType     the type of the root of the tree.
+     * @param preorder     the preorder traversal of the tree.
+     * @param parseResults a helper class
+     */
+    public static void assertTree(int rootType, String preorder, ParseResults parseResults)
     {
+        assertTree(rootType, preorder, parseResults.getTree());
     }
 
-    static void assertTree(int rootType, String preorder, ParseResults postParse) {}
-
-    static void assertTree(int rootType, String preorder, Tree tree)
+    /**
+     * Asserts a parse tree.
+     *
+     * @param rootType the type of the root of the tree.
+     * @param preorder the preorder traversal of the tree.
+     * @param tree     an ANTLR tree to assert on.
+     */
+    public static void assertTree(int rootType, String preorder, Tree tree)
     {
         assertNotNull("tree should be non-null", tree);
-//        assertEquals(preorder, preorder(tree));
+        assertEquals(preorder, preorder(tree));
         assertEquals(rootType, tree.getType());
     }
 
-    static void assertTree(String message, int rootType, String preorder, ParseResults postParse) {}
+    /**
+     * Asserts a parse tree.
+     *
+     * @param message      the message to display on failure.
+     * @param rootType     the type of the root of the tree.
+     * @param preorder     the preorder traversal of the tree.
+     * @param parseResults a helper class
+     */
+    public static void assertTree(String message, int rootType,
+                                  String preorder, ParseResults parseResults)
+    {
+        assertTree(message, rootType, preorder, parseResults.getTree());
+    }
 
-    static void assertTree(String message, int rootType, String preorder, Tree tree) {}
+    /**
+     * Asserts a parse tree.
+     *
+     * @param message  the message to display on failure.
+     * @param rootType the type of the root of the tree.
+     * @param preorder the preorder traversal of the tree.
+     * @param tree     an ANTLR tree to assert on.
+     */
+    public static void assertTree(String message, int rootType, String preorder, Tree tree)
+    {
+        assertNotNull("tree should be non-null", tree);
+        assertEquals(message + " (asserting type of root)", rootType, tree.getType());
+        assertEquals(message + " (asserting preorder)", preorder, preorder(tree));
+    }
 
-    static String preorder(Tree tree) {return null;}
+    /**
+     * Generates a preorder traversal of an ANTLR tree. In general, each tree
+     * and subtree in the preorder output is parenthesized (even leaves). The
+     * text of the AST (or token) is used to get the string to add to the
+     * preorder traversal.
+     * <p/>
+     * <p/>
+     * There are two degenerate cases:
+     * <ul>
+     * <li> <code>"<NULL!!!!>"</code> is returned when <code>tree</code> itself
+     * is <code>null</code>.</li>
+     * <li> <code>"<nil>"</code> is returned when <code>tree</code> is nil.</li>
+     * </ul>
+     *
+     * @param tree the tree to traverse.
+     * @return the preorder representation of the tree.
+     */
+    public static String preorder(Tree tree)
+    {
+        if (tree == null)
+        {
+            return "<NULL!!!!>";
+        }
+        else if (tree.isNil())
+        {
+            return "<nil>";
+        }
+        else
+        {
+            StringBuilder builder = new StringBuilder();
+            builder.append("(");
+            builder.append(tree.getText());
+            for (int i = 0; i < tree.getChildCount(); i++)
+            {
+                builder.append(preorder(tree.getChild(i)));
+            }
+            builder.append(")");
+            return builder.toString();
+        }
+    }
 
-    static void refuteToken(int refutedType, ParseResults postScan) {}
+    private Assert() { }
 }

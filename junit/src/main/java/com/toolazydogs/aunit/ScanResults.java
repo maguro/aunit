@@ -25,13 +25,28 @@ import org.antlr.runtime.TokenSource;
  */
 public class ScanResults
 {
-    public Token getSingleToken()
+    private final TokenSource tokenSource;
+    private final Token token;
+
+    public ScanResults(TokenSource tokenSource)
     {
-        return null;
+        this.tokenSource = tokenSource;
+        this.token = tokenSource.nextToken();
     }
 
     public TokenSource getTokenSource()
     {
-        return null;
+        return tokenSource;
     }
+
+    public Token getToken()
+    {
+        return token;
+    }
+
+    public ParseResults parseAs(String production)
+    {
+        return null;  //Todo change body of created methods use File | Settings | File Templates.
+    }
+
 }

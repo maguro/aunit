@@ -23,7 +23,6 @@ import org.antlr.runtime.CommonTokenStream;
 import org.antlr.runtime.Lexer;
 import org.antlr.runtime.Parser;
 import org.antlr.runtime.RuleReturnScope;
-import org.antlr.runtime.Token;
 import org.antlr.runtime.tree.Tree;
 
 
@@ -32,12 +31,12 @@ import org.antlr.runtime.tree.Tree;
  */
 public class Work
 {
-    public static Token scan(String characters) throws Exception
+    public static ScanResults scan(String characters) throws Exception
     {
         if (characters == null) throw new IllegalArgumentException("Characters cannot be null");
 
         Lexer lexer = AunitRuntime.getLexerFactory().generate(new ANTLRStringStream(characters));
-        return lexer.nextToken();
+        return new ScanResults(lexer);
     }
 
     public static Tree parse(String stream, String production, Object... arguments) throws Exception
