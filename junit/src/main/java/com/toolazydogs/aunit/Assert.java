@@ -30,6 +30,7 @@ import com.toolazydogs.aunit.internal.PreorderStream;
 
 /**
  * @author Jeremy D. Frens (jdfrens@users.sourceforge.net)
+ * @author Alan D. Cabrera (adc@toolazydogs.com)
  * @version $Revision: $ $Date: $
  */
 public class Assert
@@ -308,7 +309,10 @@ public class Assert
 
                 for (int i = 0; i < tree.getChildCount(); i++)
                 {
-                    assertPreordered(message, preorder, tree.getChild(i));
+                    Tree child = tree.getChild(i);
+
+                    if (child.getChildCount() == 0) assertEquals(message, preorder.token(), child.getText());
+                    else assertPreordered(message, preorder, tree.getChild(i));
                 }
 
                 preorder.rightparen();

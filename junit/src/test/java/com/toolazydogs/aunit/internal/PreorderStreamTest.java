@@ -29,16 +29,12 @@ public class PreorderStreamTest
     @Test
     public void testABC() throws Exception
     {
-        PreorderStream stream = new PreorderStream("(A(B)(C))");
+        PreorderStream stream = new PreorderStream("(A B C)");
 
         stream.leftparen();
         assertEquals("A", stream.token());
-        stream.leftparen();
         assertEquals("B", stream.token());
-        stream.rightparen();
-        stream.leftparen();
         assertEquals("C", stream.token());
-        stream.rightparen();
         stream.rightparen();
         stream.done();
     }
@@ -46,16 +42,12 @@ public class PreorderStreamTest
     @Test
     public void testSpaces() throws Exception
     {
-        PreorderStream stream = new PreorderStream("  ( A   ( B) (  C  ) )   ");
+        PreorderStream stream = new PreorderStream("  ( A   B   C   )   ");
 
         stream.leftparen();
         assertEquals("A", stream.token());
-        stream.leftparen();
         assertEquals("B", stream.token());
-        stream.rightparen();
-        stream.leftparen();
         assertEquals("C", stream.token());
-        stream.rightparen();
         stream.rightparen();
         stream.done();
     }
@@ -63,16 +55,12 @@ public class PreorderStreamTest
     @Test
     public void testNonCharacters() throws Exception
     {
-        PreorderStream stream = new PreorderStream("  ( +   ( 1) (  2  ) )   ");
+        PreorderStream stream = new PreorderStream("  ( +    1   2   )   ");
 
         stream.leftparen();
         assertEquals("+", stream.token());
-        stream.leftparen();
         assertEquals("1", stream.token());
-        stream.rightparen();
-        stream.leftparen();
         assertEquals("2", stream.token());
-        stream.rightparen();
         stream.rightparen();
         stream.done();
     }
@@ -80,16 +68,12 @@ public class PreorderStreamTest
     @Test
     public void testLeftoverParen() throws Exception
     {
-        PreorderStream stream = new PreorderStream("  ( +   ( 1) (  2  ) ) )  ");
+        PreorderStream stream = new PreorderStream("  ( +    1   2  )  )  ");
 
         stream.leftparen();
         assertEquals("+", stream.token());
-        stream.leftparen();
         assertEquals("1", stream.token());
-        stream.rightparen();
-        stream.leftparen();
         assertEquals("2", stream.token());
-        stream.rightparen();
         stream.rightparen();
         try
         {
