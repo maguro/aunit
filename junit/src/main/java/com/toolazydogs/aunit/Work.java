@@ -17,6 +17,10 @@
 package com.toolazydogs.aunit;
 
 import java.lang.reflect.Method;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.antlr.runtime.ANTLRStringStream;
 import org.antlr.runtime.CommonTokenStream;
@@ -47,7 +51,26 @@ public class Work
         Lexer lexer = AunitRuntime.getLexerFactory().generate(new ANTLRStringStream(stream));
         Parser parser = AunitRuntime.getParserFactory().generate(new CommonTokenStream(lexer));
 
-        Method m = parser.getClass().getMethod(production);
-        return (Tree)((RuleReturnScope)m.invoke(parser)).getTree();
+        for (Method method : collectMethods(parser.getClass()))
+        {
+            if (method.getName().equals(production))
+            {
+                return (Tree)((RuleReturnScope)method.invoke(parser, arguments)).getTree();
+            }
+        }
+
+        throw new Exception("Production " + production + " not found");
+    }
+
+    private static Set<Method> collectMethods(Class clazz)
+    {
+        if (clazz == null) return Collections.emptySet();
+
+        Set<Method> s = new HashSet<Method>();
+
+        s.addAll(Arrays.asList(clazz.getDeclaredMethods()));
+        s.addAll(collectMethods(clazz.getSuperclass()));
+
+        return s;
     }
 }

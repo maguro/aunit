@@ -53,27 +53,27 @@ block
 
 // START: var
 varDeclaration
-    :   type ID ('=' expression)? ';' -> ^(VAR_DECL type ID expression?)
+    :   type ID ('=' expression[0])? ';' -> ^(VAR_DECL type ID expression?)
     ;
 // END: var
 
 statement
     :   block
     |	varDeclaration
-    |   'return' expression? ';' -> ^('return' expression?)
+    |   'return' expression[0]? ';' -> ^('return' expression?)
     |   postfixExpression // handles function calls like f(i);
-        (   '=' expression -> ^('=' postfixExpression expression)
+        (   '=' expression[0] -> ^('=' postfixExpression expression)
         |   -> ^(EXPR postfixExpression)
         )
         ';'       
     ;
 
 expressionList
-    :   expression (',' expression)* -> ^(ELIST expression+)
+    :   expression[0] (',' expression[0])* -> ^(ELIST expression+)
     |   -> ELIST
     ;
 
-expression
+expression[int foo]
     :   addExpression -> ^(EXPR addExpression)
     ;
     
@@ -90,7 +90,7 @@ postfixExpression
 primary
     :   ID
     |   INT
-    |   '(' expression ')' -> expression
+    |   '(' expression[0] ')' -> expression
     ;
 
 // LEXER RULES
