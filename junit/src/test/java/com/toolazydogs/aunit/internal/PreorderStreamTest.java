@@ -66,6 +66,30 @@ public class PreorderStreamTest
     }
 
     @Test
+    public void testQuotes() throws Exception
+    {
+        PreorderStream stream = new PreorderStream("  ( +   ' 1   2  ' )   ");
+
+        stream.leftparen();
+        assertEquals("+", stream.token());
+        assertEquals(" 1   2  ", stream.token());
+        stream.rightparen();
+        stream.done();
+    }
+
+    @Test
+    public void testEscapedQuotes() throws Exception
+    {
+        PreorderStream stream = new PreorderStream("  ( +   ' 1 \\'\\\\  2  ' )   ");
+
+        stream.leftparen();
+        assertEquals("+", stream.token());
+        assertEquals(" 1 '\\  2  ", stream.token());
+        stream.rightparen();
+        stream.done();
+    }
+
+    @Test
     public void testLeftoverParen() throws Exception
     {
         PreorderStream stream = new PreorderStream("  ( +    1   2  )  )  ");

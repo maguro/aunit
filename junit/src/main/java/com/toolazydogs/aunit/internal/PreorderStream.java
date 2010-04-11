@@ -34,14 +34,33 @@ public class PreorderStream
     {
         while (ptr < characters.length() && Character.isWhitespace(characters.charAt(ptr))) ptr++;
         int start = ptr;
-        while (ptr < characters.length()
-               && !Character.isWhitespace(characters.charAt(ptr))
-               && characters.charAt(ptr) != '('
-               && characters.charAt(ptr) != ')')
+        boolean quoted = characters.charAt(ptr) == '\'';
+        if (quoted)
         {
             ptr++;
+            StringBuilder builder = new StringBuilder();
+
+            while (ptr < characters.length()
+                   && characters.charAt(ptr) != '\'')
+            {
+                if (characters.charAt(ptr) == '\\') ptr++;
+                builder.append(characters.charAt(ptr++));
+            }
+            ptr++;
+
+            return builder.toString();
         }
-        return characters.substring(start, ptr);
+        else
+        {
+            while (ptr < characters.length()
+                   && !Character.isWhitespace(characters.charAt(ptr))
+                   && characters.charAt(ptr) != '('
+                   && characters.charAt(ptr) != ')')
+            {
+                ptr++;
+            }
+            return characters.substring(start, ptr);
+        }
     }
 
     public void leftparen() throws PreorderException
