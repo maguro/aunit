@@ -90,6 +90,15 @@ public class PreorderStreamTest
     }
 
     @Test
+    public void testSingleNode() throws Exception
+    {
+        PreorderStream stream = new PreorderStream("  abc   ");
+
+        assertEquals("abc", stream.token());
+        stream.done();
+    }
+
+    @Test
     public void testLeftoverParen() throws Exception
     {
         PreorderStream stream = new PreorderStream("  ( +    1   2  )  )  ");

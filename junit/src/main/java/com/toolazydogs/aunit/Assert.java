@@ -301,6 +301,10 @@ public class Assert
             {
                 assertEquals(message, preorder.token(), "<nil>");
             }
+            else if (tree.getChildCount() == 0)
+            {
+                assertEquals(message, preorder.token(), tree.getText());
+            }
             else
             {
                 preorder.leftparen();
@@ -309,10 +313,7 @@ public class Assert
 
                 for (int i = 0; i < tree.getChildCount(); i++)
                 {
-                    Tree child = tree.getChild(i);
-
-                    if (child.getChildCount() == 0) assertEquals(message, preorder.token(), child.getText());
-                    else assertPreordered(message, preorder, tree.getChild(i));
+                    assertPreordered(message, preorder, tree.getChild(i));
                 }
 
                 preorder.rightparen();
