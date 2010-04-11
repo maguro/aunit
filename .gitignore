@@ -3,4 +3,4 @@
 *.iml
 *.iws
 # all target dirs
-*/target/
+target
