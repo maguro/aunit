@@ -35,7 +35,7 @@ import java.lang.annotation.Target;
 public @interface AppliesTo
 {
     /**
-     * Array of regular expressions that are matched agains test methods names.
+     * Array of regular expressions that are matched against test methods names.
      * By default (value not specified) matches all test methods (".*").
      *
      * @return array of regular expressions

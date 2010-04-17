@@ -24,10 +24,10 @@ import java.lang.annotation.Target;
 
 /**
  * Annotation that marks methods belonging into a certain context (those methods marked with {@link org.junit.Test}).
- * For example, you can have multiple configuration (see {$link org.ops4j.pax.exam.junit.Configuration}) but they belong
- * to different contexts. So you annate both of them with this annotation. Then you annote the actual test method with
+ * For example, you can have multiple configuration (see {@link com.toolazydogs.aunit.Configuration}) but they belong
+ * to different contexts. So you annotate both of them with this annotation. Then you annotate the actual test method with
  * exactly the same annotation.
- * This approach makes configuration+test method coupling independent from nameing of methods (different from AppliesTo Annotation).
+ * This approach makes configuration+test method coupling independent from naming of methods (different from AppliesTo Annotation).
  *
  * @author Toni Menzel (toni@okidokiteam.com)
  * @version $Revision: $ $Date: $

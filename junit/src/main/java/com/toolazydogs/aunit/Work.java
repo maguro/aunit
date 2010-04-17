@@ -22,6 +22,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
+import junit.framework.AssertionFailedError;
 import org.antlr.runtime.ANTLRStringStream;
 import org.antlr.runtime.CommonTokenStream;
 import org.antlr.runtime.Lexer;
@@ -38,6 +39,7 @@ public class Work
     public static LexerResults scan(String characters) throws Exception
     {
         if (characters == null) throw new IllegalArgumentException("Characters cannot be null");
+        if (AunitRuntime.getLexerFactory() == null) throw new AssertionFailedError("Lexer factory not set by configuration");
 
         Lexer lexer = AunitRuntime.getLexerFactory().generate(new ANTLRStringStream(characters));
         return new LexerResults(lexer);
@@ -47,6 +49,8 @@ public class Work
     {
         if (stream == null) throw new IllegalArgumentException("Stream cannot be null");
         if (production == null) throw new IllegalArgumentException("Production name cannot be null");
+        if (AunitRuntime.getLexerFactory() == null) throw new AssertionFailedError("Lexer factory not set by configuration");
+        if (AunitRuntime.getParserFactory() == null) throw new AssertionFailedError("Parser factory not set by configuration");
 
         Lexer lexer = AunitRuntime.getLexerFactory().generate(new ANTLRStringStream(stream));
         Parser parser = AunitRuntime.getParserFactory().generate(new CommonTokenStream(lexer));
@@ -55,7 +59,7 @@ public class Work
         {
             if (method.getName().equals(production))
             {
-                return (Tree)((RuleReturnScope)method.invoke(parser, arguments)).getTree();
+                return (Tree) ((RuleReturnScope) method.invoke(parser, arguments)).getTree();
             }
         }
 
