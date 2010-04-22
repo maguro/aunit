@@ -27,6 +27,8 @@ import com.toolazydogs.aunit.tests.CMinusParser;
 
 
 /**
+ * Fake parser to help w/ ASM investigation on extending existing parsers.
+ *
  * @version $Revision: $ $Date: $
  */
 public class FooParser extends CMinusParser implements ParserWrapper
