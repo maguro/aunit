@@ -23,11 +23,12 @@ import static com.toolazydogs.aunit.CoreOptions.options;
 import static com.toolazydogs.aunit.CoreOptions.parser;
 import static com.toolazydogs.aunit.Work.parse;
 import static com.toolazydogs.aunit.Work.scan;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-
 import com.toolazydogs.aunit.tests.CMinusLexer;
 import com.toolazydogs.aunit.tests.CMinusParser;
+import junit.framework.AssertionFailedError;
+import static org.junit.Assert.fail;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 
 
 /**
@@ -37,7 +38,18 @@ import com.toolazydogs.aunit.tests.CMinusParser;
 public class CMinusTest
 {
     @Configuration
-    public static Option[] configure()
+    @AppliesTo("test.*")
+    public static Option[] configureTest()
+    {
+        return options(
+                lexer(CMinusLexer.class).failOnError(),
+                parser(CMinusParser.class).failOnError()
+        );
+    }
+
+    @Configuration
+    @AppliesTo("specialTest")
+    public static Option[] configureSpecial()
     {
         return options(
                 lexer(CMinusLexer.class).failOnError(),
@@ -52,4 +64,35 @@ public class CMinusTest
 
         assertTree(CMinusParser.EXPR, "(EXPR (+ 1 2))", parse("1 + 2", "expression", 15));
     }
+
+    @Test
+    public void specialTest() throws Exception
+    {
+        assertToken(CMinusLexer.ID, "abc", scan("abc"));
+
+        assertTree(CMinusParser.EXPR, "(EXPR (+ 1 2))", parse("1 + 2", "expression", 15));
+    }
+
+    @Test
+    public void unconfiguredTest() throws Exception
+    {
+        try
+        {
+            assertToken(CMinusLexer.ID, "abc", scan("abc"));
+            fail("Unconfigured test should have failed");
+        }
+        catch (AssertionFailedError e)
+        {
+        }
+
+        try
+        {
+            assertTree(CMinusParser.EXPR, "(EXPR (+ 1 2))", parse("1 + 2", "expression", 15));
+            fail("Unconfigured test should have failed");
+        }
+        catch (AssertionFailedError e)
+        {
+        }
+    }
+
 }

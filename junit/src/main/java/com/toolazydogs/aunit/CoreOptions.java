@@ -33,9 +33,6 @@ import com.toolazydogs.aunit.internal.DefaultCompositeOption;
  */
 public class CoreOptions
 {
-
-    private static final String DEFAULT_CONFIGURATION = "META-INF/maven/paxexam-config.args";
-
     /**
      * Utility class. Meant to be used via the static factory methods.
      */
