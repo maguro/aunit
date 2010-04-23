@@ -34,7 +34,7 @@ import com.toolazydogs.aunit.tests.CMinusParser;
 public class FooParser extends CMinusParser implements ParserWrapper
 {
     private final List<String> errors = new ArrayList<String>();
-    private boolean failOnError = false;
+    private boolean failOnError = true;
 
     public FooParser(TokenStream input)
     {

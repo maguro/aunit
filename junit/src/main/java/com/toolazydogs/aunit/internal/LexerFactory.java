@@ -34,11 +34,13 @@ import org.objectweb.asm.Opcodes;
 public class LexerFactory implements Opcodes
 {
     private final Class<? extends Lexer> lexerClass;
+    private final boolean failOnError;
     private Class<? extends Lexer> wrapperClass;
 
-    public LexerFactory(Class<? extends Lexer> lexerClass)
+    public LexerFactory(Class<? extends Lexer> lexerClass, boolean failOnError)
     {
         this.lexerClass = lexerClass;
+        this.failOnError = failOnError;
     }
 
     public Lexer generate() throws Exception
@@ -50,14 +52,22 @@ public class LexerFactory implements Opcodes
     {
         Class<? extends Lexer> wc = getWrapperClass();
         Constructor c = wc.getConstructor(CharStream.class);
-        return (Lexer)c.newInstance(input);
+        LexerWrapper wrapper = (LexerWrapper)c.newInstance(input);
+
+        wrapper.setFailOnError(failOnError);
+
+        return (Lexer)wrapper;
     }
 
     public Lexer generate(CharStream input, RecognizerSharedState state) throws Exception
     {
         Class<? extends Lexer> wc = getWrapperClass();
         Constructor c = wc.getConstructor(CharStream.class, RecognizerSharedState.class);
-        return (Lexer)c.newInstance(input, state);
+        LexerWrapper wrapper = (LexerWrapper)c.newInstance(input, state);
+
+        wrapper.setFailOnError(failOnError);
+
+        return (Lexer)wrapper;
     }
 
     private Class<? extends Lexer> getWrapperClass()
@@ -97,7 +107,7 @@ public class LexerFactory implements Opcodes
             mv.visitMethodInsn(INVOKESPECIAL, "java/util/ArrayList", "<init>", "()V");
             mv.visitFieldInsn(PUTFIELD, name, "errors", "Ljava/util/List;");
             mv.visitVarInsn(ALOAD, 0);
-            mv.visitInsn(ICONST_0);
+            mv.visitInsn(ICONST_1);
             mv.visitFieldInsn(PUTFIELD, name, "failOnError", "Z");
             mv.visitInsn(RETURN);
             mv.visitMaxs(3, 1);
@@ -115,7 +125,7 @@ public class LexerFactory implements Opcodes
             mv.visitMethodInsn(INVOKESPECIAL, "java/util/ArrayList", "<init>", "()V");
             mv.visitFieldInsn(PUTFIELD, name, "errors", "Ljava/util/List;");
             mv.visitVarInsn(ALOAD, 0);
-            mv.visitInsn(ICONST_0);
+            mv.visitInsn(ICONST_1);
             mv.visitFieldInsn(PUTFIELD, name, "failOnError", "Z");
             mv.visitInsn(RETURN);
             mv.visitMaxs(3, 2);
@@ -134,7 +144,7 @@ public class LexerFactory implements Opcodes
             mv.visitMethodInsn(INVOKESPECIAL, "java/util/ArrayList", "<init>", "()V");
             mv.visitFieldInsn(PUTFIELD, name, "errors", "Ljava/util/List;");
             mv.visitVarInsn(ALOAD, 0);
-            mv.visitInsn(ICONST_0);
+            mv.visitInsn(ICONST_1);
             mv.visitFieldInsn(PUTFIELD, name, "failOnError", "Z");
             mv.visitInsn(RETURN);
             mv.visitMaxs(3, 3);

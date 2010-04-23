@@ -30,6 +30,8 @@ import org.antlr.runtime.Parser;
 import org.antlr.runtime.RuleReturnScope;
 import org.antlr.runtime.tree.Tree;
 
+import com.toolazydogs.aunit.internal.ParserWrapper;
+
 
 /**
  * @version $Revision: $ $Date: $
@@ -59,7 +61,15 @@ public class Work
         {
             if (method.getName().equals(production))
             {
-                return (Tree) ((RuleReturnScope) method.invoke(parser, arguments)).getTree();
+                RuleReturnScope rs = (RuleReturnScope)method.invoke(parser, arguments);
+
+                ParserWrapper wrapper = (ParserWrapper)parser;
+                if (wrapper.isFailOnError() && !wrapper.getErrors().isEmpty())
+                {
+                    throw new AssertionFailedError(wrapper.getErrors().get(0));
+                }
+
+                return (Tree)rs.getTree();
             }
         }
 

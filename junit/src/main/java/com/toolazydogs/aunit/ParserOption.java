@@ -28,7 +28,7 @@ import com.toolazydogs.aunit.internal.ParserFactory;
 public class ParserOption implements Option
 {
     private final Class<? extends Parser> parserClass;
-    private boolean failOnError = false;
+    private boolean failOnError = true;
 
     public ParserOption(Class<? extends Parser> parserClass)
     {
@@ -64,7 +64,7 @@ public class ParserOption implements Option
             @Override
             public void evaluate() throws Throwable
             {
-                AunitRuntime.setParserFactory(new ParserFactory(parserClass));
+                AunitRuntime.setParserFactory(new ParserFactory(parserClass, failOnError));
             }
         };
     }

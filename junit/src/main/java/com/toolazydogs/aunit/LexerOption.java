@@ -28,7 +28,7 @@ import com.toolazydogs.aunit.internal.LexerFactory;
 public class LexerOption implements Option
 {
     private final Class<? extends Lexer> lexerClass;
-    private boolean failOnError = false;
+    private boolean failOnError = true;
 
     public LexerOption(Class<? extends Lexer> lexerClass)
     {
@@ -64,7 +64,7 @@ public class LexerOption implements Option
             @Override
             public void evaluate() throws Throwable
             {
-                AunitRuntime.setLexerFactory(new LexerFactory(lexerClass));
+                AunitRuntime.setLexerFactory(new LexerFactory(lexerClass, failOnError));
             }
         };
     }

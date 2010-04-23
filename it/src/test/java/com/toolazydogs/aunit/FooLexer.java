@@ -34,7 +34,7 @@ import com.toolazydogs.aunit.tests.CMinusLexer;
 public class FooLexer extends CMinusLexer implements LexerWrapper
 {
     private final List<String> errors = new ArrayList<String>();
-    private boolean failOnError = false;
+    private boolean failOnError = true;
 
     public FooLexer()
     {

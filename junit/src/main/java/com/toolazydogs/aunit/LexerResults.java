@@ -16,8 +16,11 @@
  */
 package com.toolazydogs.aunit;
 
+import junit.framework.AssertionFailedError;
 import org.antlr.runtime.Token;
 import org.antlr.runtime.TokenSource;
+
+import com.toolazydogs.aunit.internal.LexerWrapper;
 
 
 /**
@@ -32,6 +35,12 @@ public class LexerResults
     {
         this.tokenSource = tokenSource;
         this.token = tokenSource.nextToken();
+
+        LexerWrapper wrapper = (LexerWrapper)tokenSource;
+        if (wrapper.isFailOnError() && !wrapper.getErrors().isEmpty())
+        {
+            throw new AssertionFailedError(wrapper.getErrors().get(0));
+        }
     }
 
     public TokenSource getTokenSource()

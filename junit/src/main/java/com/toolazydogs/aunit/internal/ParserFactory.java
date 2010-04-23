@@ -35,25 +35,35 @@ import org.objectweb.asm.Opcodes;
 public class ParserFactory implements Opcodes
 {
     private final Class<? extends Parser> parserClass;
+    private final boolean failOnError;
     private Class<? extends Parser> wrapperClass;
 
-    public ParserFactory(Class<? extends Parser> parserClass)
+    public ParserFactory(Class<? extends Parser> parserClass, boolean failOnError)
     {
         this.parserClass = parserClass;
+        this.failOnError = failOnError;
     }
 
     public Parser generate(TokenStream input) throws Exception
     {
         Class<? extends Parser> wc = getWrapperClass();
         Constructor c = wc.getConstructor(TokenStream.class);
-        return (Parser)c.newInstance(input);
+        ParserWrapper wrapper = (ParserWrapper)c.newInstance(input);
+
+        wrapper.setFailOnError(failOnError);
+
+        return (Parser)wrapper;
     }
 
     public Parser generate(TokenStream input, RecognizerSharedState state) throws Exception
     {
         Class<? extends Parser> wc = getWrapperClass();
         Constructor c = wc.getConstructor(CharStream.class, RecognizerSharedState.class);
-        return (Parser)c.newInstance(input, state);
+        ParserWrapper wrapper = (ParserWrapper)c.newInstance(input, state);
+
+        wrapper.setFailOnError(failOnError);
+
+        return (Parser)wrapper;
     }
 
     private Class<? extends Parser> getWrapperClass()
@@ -94,7 +104,7 @@ public class ParserFactory implements Opcodes
             mv.visitMethodInsn(INVOKESPECIAL, "java/util/ArrayList", "<init>", "()V");
             mv.visitFieldInsn(PUTFIELD, name, "errors", "Ljava/util/List;");
             mv.visitVarInsn(ALOAD, 0);
-            mv.visitInsn(ICONST_0);
+            mv.visitInsn(ICONST_1);
             mv.visitFieldInsn(PUTFIELD, name, "failOnError", "Z");
             mv.visitInsn(RETURN);
             mv.visitMaxs(3, 2);
@@ -113,7 +123,7 @@ public class ParserFactory implements Opcodes
             mv.visitMethodInsn(INVOKESPECIAL, "java/util/ArrayList", "<init>", "()V");
             mv.visitFieldInsn(PUTFIELD, name, "errors", "Ljava/util/List;");
             mv.visitVarInsn(ALOAD, 0);
-            mv.visitInsn(ICONST_0);
+            mv.visitInsn(ICONST_1);
             mv.visitFieldInsn(PUTFIELD, name, "failOnError", "Z");
             mv.visitInsn(RETURN);
             mv.visitMaxs(3, 3);
