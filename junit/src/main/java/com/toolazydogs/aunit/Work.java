@@ -47,29 +47,36 @@ public class Work
         return new LexerResults(lexer);
     }
 
-    public static Tree parse(String stream, String production, Object... arguments) throws Exception
+    public static Tree parse(String stream, ParserMethod parserMethod) throws Exception
     {
         if (stream == null) throw new IllegalArgumentException("Stream cannot be null");
-        if (production == null) throw new IllegalArgumentException("Production name cannot be null");
+        if (parserMethod == null) throw new IllegalArgumentException("ParserMethod cannot be null, please use production()");
         if (AunitRuntime.getLexerFactory() == null) throw new AssertionFailedError("Lexer factory not set by configuration");
         if (AunitRuntime.getParserFactory() == null) throw new AssertionFailedError("Parser factory not set by configuration");
 
         Lexer lexer = AunitRuntime.getLexerFactory().generate(new ANTLRStringStream(stream));
         Parser parser = AunitRuntime.getParserFactory().generate(new CommonTokenStream(lexer));
 
-        for (Method method : collectMethods(parser.getClass()))
+        RuleReturnScope rs = parserMethod.invoke(parser);
+
+        ParserWrapper wrapper = (ParserWrapper)parser;
+        if (wrapper.isFailOnError() && !wrapper.getErrors().isEmpty())
+        {
+            throw new AssertionFailedError(wrapper.getErrors().get(0));
+        }
+
+        return (Tree)rs.getTree();
+    }
+
+    public static ParserMethod production(String production, Object... arguments) throws Exception
+    {
+        if (AunitRuntime.getParserFactory() == null) throw new AssertionFailedError("Parser factory not set by configuration");
+
+        for (Method method : collectMethods(AunitRuntime.getParserFactory().getParserClass()))
         {
             if (method.getName().equals(production))
             {
-                RuleReturnScope rs = (RuleReturnScope)method.invoke(parser, arguments);
-
-                ParserWrapper wrapper = (ParserWrapper)parser;
-                if (wrapper.isFailOnError() && !wrapper.getErrors().isEmpty())
-                {
-                    throw new AssertionFailedError(wrapper.getErrors().get(0));
-                }
-
-                return (Tree)rs.getTree();
+                return new ParserMethod(method, arguments);
             }
         }
 

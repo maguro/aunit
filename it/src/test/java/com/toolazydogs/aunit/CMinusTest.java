@@ -22,13 +22,15 @@ import static com.toolazydogs.aunit.CoreOptions.lexer;
 import static com.toolazydogs.aunit.CoreOptions.options;
 import static com.toolazydogs.aunit.CoreOptions.parser;
 import static com.toolazydogs.aunit.Work.parse;
+import static com.toolazydogs.aunit.Work.production;
 import static com.toolazydogs.aunit.Work.scan;
-import com.toolazydogs.aunit.tests.CMinusLexer;
-import com.toolazydogs.aunit.tests.CMinusParser;
 import junit.framework.AssertionFailedError;
 import static org.junit.Assert.fail;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import com.toolazydogs.aunit.tests.CMinusLexer;
+import com.toolazydogs.aunit.tests.CMinusParser;
 
 
 /**
@@ -62,7 +64,8 @@ public class CMinusTest
     {
         assertToken(CMinusLexer.ID, "abc", scan("abc"));
 
-        assertTree(CMinusParser.EXPR, "(EXPR (+ 1 2))", parse("1 + 2", "expression", 15));
+        assertTree(CMinusParser.BLOCK, "(BLOCK  (= a (EXPR (+ 1 2)))  ) ", parse("{ a = 1 + 2; }", production("block")));
+        assertTree(CMinusParser.EXPR, "(EXPR (+ 1 2))", parse("1 + 2", production("expression", 15)));
     }
 
     @Test
@@ -70,7 +73,7 @@ public class CMinusTest
     {
         assertToken(CMinusLexer.ID, "abc", scan("abc"));
 
-        assertTree(CMinusParser.EXPR, "(EXPR (+ 1 2))", parse("1 + 2", "expression", 15));
+        assertTree(CMinusParser.EXPR, "(EXPR (+ 1 2))", parse("1 + 2", production("expression", 15)));
     }
 
     @Test
@@ -87,7 +90,7 @@ public class CMinusTest
 
         try
         {
-            assertTree(CMinusParser.EXPR, "(EXPR (+ 1 2))", parse("1 + 2", "expression", 15));
+            assertTree(CMinusParser.EXPR, "(EXPR (+ 1 2))", parse("1 + 2", production("expression", 15)));
             fail("Unconfigured test should have failed");
         }
         catch (AssertionFailedError e)

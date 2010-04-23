@@ -243,8 +243,8 @@ public class Assert
     public static void assertTree(int rootType, String preorder, Tree tree)
     {
         assertNotNull("tree should be non-null", tree);
-        assertPreordered("asserting preorder", preorder, tree);
-        assertEquals(rootType, tree.getType());
+        assertPreordered("Expecting " + preorder + " from " + tree.toStringTree(), preorder, tree);
+        assertEquals("Comparing root type", rootType, tree.getType());
     }
 
     /**
@@ -272,7 +272,7 @@ public class Assert
     {
         assertNotNull("tree should be non-null", tree);
         assertEquals(message + " (asserting type of root)", rootType, tree.getType());
-        assertPreordered(message + " (asserting preorder)", preorder, tree);
+        assertPreordered(message + ": Expecting " + preorder + " from " + tree.toStringTree(), preorder, tree);
     }
 
     private static void assertPreordered(String message, String preorder, Tree tree)

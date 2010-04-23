@@ -44,6 +44,11 @@ public class ParserFactory implements Opcodes
         this.failOnError = failOnError;
     }
 
+    public Class getParserClass()
+    {
+        return parserClass;
+    }
+
     public Parser generate(TokenStream input) throws Exception
     {
         Class<? extends Parser> wc = getWrapperClass();
