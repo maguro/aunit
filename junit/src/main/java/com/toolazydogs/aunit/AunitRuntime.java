@@ -106,4 +106,6 @@ public class AunitRuntime
         PARSER.set(null);
         WALKER.set(null);
     }
+
+    private AunitRuntime() { }
 }
