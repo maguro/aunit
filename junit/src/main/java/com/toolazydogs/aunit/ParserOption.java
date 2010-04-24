@@ -25,33 +25,33 @@ import com.toolazydogs.aunit.internal.ParserFactory;
 /**
  * @version $Revision: $ $Date: $
  */
-public class ParserOption implements Option
+class ParserOption implements Option
 {
     private final Class<? extends Parser> parserClass;
     private boolean failOnError = true;
 
-    public ParserOption(Class<? extends Parser> parserClass)
+    ParserOption(Class<? extends Parser> parserClass)
     {
         this.parserClass = parserClass;
     }
 
-    public Class<? extends Parser> getParserClass()
+    Class<? extends Parser> getParserClass()
     {
         return parserClass;
     }
 
-    public boolean isFailOnError()
+    boolean isFailOnError()
     {
         return failOnError;
     }
 
-    public ParserOption failOnError()
+    ParserOption failOnError()
     {
         failOnError = true;
         return this;
     }
 
-    public ParserOption failOnError(boolean fail)
+    ParserOption failOnError(boolean fail)
     {
         failOnError = fail;
         return this;

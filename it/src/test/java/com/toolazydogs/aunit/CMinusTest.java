@@ -24,7 +24,6 @@ import static com.toolazydogs.aunit.CoreOptions.parser;
 import static com.toolazydogs.aunit.Work.parse;
 import static com.toolazydogs.aunit.Work.production;
 import static com.toolazydogs.aunit.Work.scan;
-import junit.framework.AssertionFailedError;
 import static org.junit.Assert.fail;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -84,7 +83,7 @@ public class CMinusTest
             assertToken(CMinusLexer.ID, "abc", scan("abc"));
             fail("Unconfigured test should have failed");
         }
-        catch (AssertionFailedError e)
+        catch (IllegalStateException e)
         {
         }
 
@@ -93,7 +92,7 @@ public class CMinusTest
             assertTree(CMinusParser.EXPR, "(EXPR (+ 1 2))", parse("1 + 2", production("expression", 15)));
             fail("Unconfigured test should have failed");
         }
-        catch (AssertionFailedError e)
+        catch (IllegalStateException e)
         {
         }
     }

@@ -16,23 +16,23 @@
  */
 package com.toolazydogs.aunit;
 
-import org.antlr.runtime.tree.Tree;
+import java.util.List;
 
 
 /**
  * @version $Revision: $ $Date: $
  */
-class ParseResults
+public class LexerException extends RuntimeException
 {
-    private Tree tree;
+    private List<String> messages;
 
-    ParseResults(Tree tree)
+    public LexerException(List<String> messages)
     {
-        this.tree = tree;
+        this.messages = messages;
     }
 
-    Tree getTree()
+    public List<String> getMessages()
     {
-        return tree;
+        return messages;
     }
 }

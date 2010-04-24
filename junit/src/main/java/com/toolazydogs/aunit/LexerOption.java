@@ -25,33 +25,33 @@ import com.toolazydogs.aunit.internal.LexerFactory;
 /**
  * @version $Revision: $ $Date: $
  */
-public class LexerOption implements Option
+class LexerOption implements Option
 {
     private final Class<? extends Lexer> lexerClass;
     private boolean failOnError = true;
 
-    public LexerOption(Class<? extends Lexer> lexerClass)
+    LexerOption(Class<? extends Lexer> lexerClass)
     {
         this.lexerClass = lexerClass;
     }
 
-    public Class<? extends Lexer> getLexerClass()
+    Class<? extends Lexer> getLexerClass()
     {
         return lexerClass;
     }
 
-    public boolean isFailOnError()
+    boolean isFailOnError()
     {
         return failOnError;
     }
 
-    public LexerOption failOnError()
+    LexerOption failOnError()
     {
         failOnError = true;
         return this;
     }
 
-    public LexerOption failOnError(boolean fail)
+    LexerOption failOnError(boolean fail)
     {
         failOnError = fail;
         return this;

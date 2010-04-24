@@ -26,12 +26,12 @@ import com.toolazydogs.aunit.internal.LexerWrapper;
 /**
  * @version $Revision: $ $Date: $
  */
-public class LexerResults
+class LexerResults
 {
     private final TokenSource tokenSource;
     private final Token token;
 
-    public LexerResults(TokenSource tokenSource)
+    LexerResults(TokenSource tokenSource)
     {
         this.tokenSource = tokenSource;
         this.token = tokenSource.nextToken();
@@ -39,21 +39,21 @@ public class LexerResults
         LexerWrapper wrapper = (LexerWrapper)tokenSource;
         if (wrapper.isFailOnError() && !wrapper.getErrors().isEmpty())
         {
-            throw new AssertionFailedError(wrapper.getErrors().get(0));
+            throw new LexerException(wrapper.getErrors());
         }
     }
 
-    public TokenSource getTokenSource()
+    TokenSource getTokenSource()
     {
         return tokenSource;
     }
 
-    public Token getToken()
+    Token getToken()
     {
         return token;
     }
 
-    public ParseResults parseAs(String production)
+    ParseResults parseAs(String production, Object... arguments)
     {
         return null;  //Todo change body of created methods use File | Settings | File Templates.
     }

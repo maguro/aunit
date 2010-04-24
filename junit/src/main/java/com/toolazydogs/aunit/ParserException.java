@@ -16,29 +16,23 @@
  */
 package com.toolazydogs.aunit;
 
-import java.lang.reflect.Method;
-
-import org.antlr.runtime.Parser;
-import org.antlr.runtime.RuleReturnScope;
+import java.util.List;
 
 
 /**
  * @version $Revision: $ $Date: $
  */
-public class ParserMethod
+public class ParserException extends RuntimeException
 {
-    private final Method method;
-    private Object[] arguments;
+    private List<String> messages;
 
-    public ParserMethod(Method method, Object... arguments)
+    public ParserException(List<String> messages)
     {
-        this.method = method;
-        this.arguments = arguments;
-
+        this.messages = messages;
     }
 
-    public RuleReturnScope invoke(Parser parser) throws Exception
+    public List<String> getMessages()
     {
-        return (RuleReturnScope)method.invoke(parser, arguments);
+        return messages;
     }
 }

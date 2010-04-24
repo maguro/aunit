@@ -16,23 +16,29 @@
  */
 package com.toolazydogs.aunit;
 
-import org.antlr.runtime.tree.Tree;
+import java.lang.reflect.Method;
+
+import org.antlr.runtime.Parser;
+import org.antlr.runtime.RuleReturnScope;
 
 
 /**
  * @version $Revision: $ $Date: $
  */
-class ParseResults
+class SelectedProduction
 {
-    private Tree tree;
+    private final Method method;
+    private Object[] arguments;
 
-    ParseResults(Tree tree)
+    SelectedProduction(Method method, Object... arguments)
     {
-        this.tree = tree;
+        this.method = method;
+        this.arguments = arguments;
+
     }
 
-    Tree getTree()
+    RuleReturnScope invoke(Parser parser) throws Exception
     {
-        return tree;
+        return (RuleReturnScope)method.invoke(parser, arguments);
     }
 }

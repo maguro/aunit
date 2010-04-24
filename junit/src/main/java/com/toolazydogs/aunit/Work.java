@@ -22,7 +22,6 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
-import junit.framework.AssertionFailedError;
 import org.antlr.runtime.ANTLRStringStream;
 import org.antlr.runtime.CommonTokenStream;
 import org.antlr.runtime.Lexer;
@@ -41,42 +40,42 @@ public class Work
     public static LexerResults scan(String characters) throws Exception
     {
         if (characters == null) throw new IllegalArgumentException("Characters cannot be null");
-        if (AunitRuntime.getLexerFactory() == null) throw new AssertionFailedError("Lexer factory not set by configuration");
+        if (AunitRuntime.getLexerFactory() == null) throw new IllegalStateException("Lexer factory not set by configuration");
 
         Lexer lexer = AunitRuntime.getLexerFactory().generate(new ANTLRStringStream(characters));
         return new LexerResults(lexer);
     }
 
-    public static Tree parse(String stream, ParserMethod parserMethod) throws Exception
+    public static Tree parse(String stream, SelectedProduction selectedProduction) throws Exception
     {
         if (stream == null) throw new IllegalArgumentException("Stream cannot be null");
-        if (parserMethod == null) throw new IllegalArgumentException("ParserMethod cannot be null, please use production()");
-        if (AunitRuntime.getLexerFactory() == null) throw new AssertionFailedError("Lexer factory not set by configuration");
-        if (AunitRuntime.getParserFactory() == null) throw new AssertionFailedError("Parser factory not set by configuration");
+        if (selectedProduction == null) throw new IllegalArgumentException("SelectedProduction cannot be null, please use production()");
+        if (AunitRuntime.getLexerFactory() == null) throw new IllegalStateException("Lexer factory not set by configuration");
+        if (AunitRuntime.getParserFactory() == null) throw new IllegalStateException("Parser factory not set by configuration");
 
         Lexer lexer = AunitRuntime.getLexerFactory().generate(new ANTLRStringStream(stream));
         Parser parser = AunitRuntime.getParserFactory().generate(new CommonTokenStream(lexer));
 
-        RuleReturnScope rs = parserMethod.invoke(parser);
+        RuleReturnScope rs = selectedProduction.invoke(parser);
 
         ParserWrapper wrapper = (ParserWrapper)parser;
         if (wrapper.isFailOnError() && !wrapper.getErrors().isEmpty())
         {
-            throw new AssertionFailedError(wrapper.getErrors().get(0));
+            throw new ParserException(wrapper.getErrors());
         }
 
         return (Tree)rs.getTree();
     }
 
-    public static ParserMethod production(String production, Object... arguments) throws Exception
+    public static SelectedProduction production(String production, Object... arguments) throws Exception
     {
-        if (AunitRuntime.getParserFactory() == null) throw new AssertionFailedError("Parser factory not set by configuration");
+        if (AunitRuntime.getParserFactory() == null) throw new IllegalStateException("Parser factory not set by configuration");
 
         for (Method method : collectMethods(AunitRuntime.getParserFactory().getParserClass()))
         {
             if (method.getName().equals(production))
             {
-                return new ParserMethod(method, arguments);
+                return new SelectedProduction(method, arguments);
             }
         }
 
@@ -94,4 +93,6 @@ public class Work
 
         return s;
     }
+
+    private Work() { }
 }
