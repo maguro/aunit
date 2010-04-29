@@ -16,11 +16,15 @@
  */
 package com.toolazydogs.aunit;
 
-import junit.framework.AssertionFailedError;
+import org.antlr.runtime.CommonTokenStream;
+import org.antlr.runtime.Parser;
+import org.antlr.runtime.RuleReturnScope;
 import org.antlr.runtime.Token;
 import org.antlr.runtime.TokenSource;
+import org.antlr.runtime.tree.Tree;
 
 import com.toolazydogs.aunit.internal.LexerWrapper;
+import com.toolazydogs.aunit.internal.ParserWrapper;
 
 
 /**
@@ -53,9 +57,22 @@ class LexerResults
         return token;
     }
 
-    ParseResults parseAs(String production, Object... arguments)
+    ParseResults parseAs(SelectedProduction selectedProduction) throws Exception
     {
-        return null;  //Todo change body of created methods use File | Settings | File Templates.
+        if (selectedProduction == null) throw new IllegalArgumentException("SelectedProduction cannot be null, please use production()");
+        if (AunitRuntime.getParserFactory() == null) throw new IllegalStateException("Parser factory not set by configuration");
+
+        Parser parser = AunitRuntime.getParserFactory().generate(new CommonTokenStream(tokenSource));
+
+        RuleReturnScope rs = selectedProduction.invoke(parser);
+
+        ParserWrapper wrapper = (ParserWrapper)parser;
+        if (wrapper.isFailOnError() && !wrapper.getErrors().isEmpty())
+        {
+            throw new ParserException(wrapper.getErrors());
+        }
+
+        return new ParseResults((Tree)rs.getTree());
     }
 
 }
