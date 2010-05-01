@@ -185,21 +185,21 @@ public class Assert
 
     /**
      * To "refute" a parse means that the scan cannot be parsed with the
-     * specified production.
+     * specified rule.
      * <p/>
      * <pre>
      * refuteParse(&quot;program&quot;, myTester.scanInput(&quot;5 / * 8&quot;));
      * </pre>
      *
-     * @param production   the production to apply from the parser.
+     * @param rule   the rule to apply from the parser.
      * @param lexerResults the result of scanning input with the tester.
      */
-    public static void refuteParse(String production, LexerResults lexerResults)
+    public static void refuteParse(SelectedRule rule, LexerResults lexerResults)
     {
         try
         {
-            lexerResults.parseAs(production);
-            fail("parsed as " + production);
+            lexerResults.parseAs(rule);
+            fail("parsed as " + rule);
         }
         catch (AssertionError e)
         {

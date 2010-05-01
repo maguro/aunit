@@ -25,12 +25,12 @@ import org.antlr.runtime.RuleReturnScope;
 /**
  * @version $Revision: $ $Date: $
  */
-class SelectedProduction
+class SelectedRule
 {
     private final Method method;
     private Object[] arguments;
 
-    SelectedProduction(Method method, Object... arguments)
+    SelectedRule(Method method, Object... arguments)
     {
         this.method = method;
         this.arguments = arguments;

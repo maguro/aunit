@@ -46,17 +46,17 @@ public class Work
         return new LexerResults(lexer);
     }
 
-    public static Tree parse(String stream, SelectedProduction selectedProduction) throws Exception
+    public static Tree parse(String stream, SelectedRule selectedRule) throws Exception
     {
         if (stream == null) throw new IllegalArgumentException("Stream cannot be null");
-        if (selectedProduction == null) throw new IllegalArgumentException("SelectedProduction cannot be null, please use production()");
+        if (selectedRule == null) throw new IllegalArgumentException("SelectedRule cannot be null, please use rule()");
         if (AunitRuntime.getLexerFactory() == null) throw new IllegalStateException("Lexer factory not set by configuration");
         if (AunitRuntime.getParserFactory() == null) throw new IllegalStateException("Parser factory not set by configuration");
 
         Lexer lexer = AunitRuntime.getLexerFactory().generate(new ANTLRStringStream(stream));
         Parser parser = AunitRuntime.getParserFactory().generate(new CommonTokenStream(lexer));
 
-        RuleReturnScope rs = selectedProduction.invoke(parser);
+        RuleReturnScope rs = selectedRule.invoke(parser);
 
         ParserWrapper wrapper = (ParserWrapper)parser;
         if (wrapper.isFailOnError() && !wrapper.getErrors().isEmpty())
@@ -67,19 +67,19 @@ public class Work
         return (Tree)rs.getTree();
     }
 
-    public static SelectedProduction production(String production, Object... arguments) throws Exception
+    public static SelectedRule rule(String rule, Object... arguments) throws Exception
     {
         if (AunitRuntime.getParserFactory() == null) throw new IllegalStateException("Parser factory not set by configuration");
 
         for (Method method : collectMethods(AunitRuntime.getParserFactory().getParserClass()))
         {
-            if (method.getName().equals(production))
+            if (method.getName().equals(rule))
             {
-                return new SelectedProduction(method, arguments);
+                return new SelectedRule(method, arguments);
             }
         }
 
-        throw new Exception("Production " + production + " not found");
+        throw new Exception("Rule " + rule + " not found");
     }
 
     private static Set<Method> collectMethods(Class clazz)

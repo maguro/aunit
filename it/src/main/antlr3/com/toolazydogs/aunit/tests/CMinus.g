@@ -73,6 +73,8 @@ expressionList
     |   -> ELIST
     ;
 
+// We add the foo parameter as a trumped up example of a rule that takes a
+// parameter
 expression[int foo]
     :   addExpression -> ^(EXPR addExpression)
     ;

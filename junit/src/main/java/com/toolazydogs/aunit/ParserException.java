@@ -16,6 +16,7 @@
  */
 package com.toolazydogs.aunit;
 
+import java.util.Collections;
 import java.util.List;
 
 
@@ -25,6 +26,12 @@ import java.util.List;
 public class ParserException extends RuntimeException
 {
     private List<String> messages;
+
+    public ParserException(String message)
+    {
+        super(message);
+        this.messages = Collections.singletonList(message);
+    }
 
     public ParserException(List<String> messages)
     {

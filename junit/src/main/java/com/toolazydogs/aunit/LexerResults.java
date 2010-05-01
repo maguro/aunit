@@ -57,14 +57,23 @@ class LexerResults
         return token;
     }
 
-    ParseResults parseAs(SelectedProduction selectedProduction) throws Exception
+    ParseResults parseAs(SelectedRule selectedRule)
     {
-        if (selectedProduction == null) throw new IllegalArgumentException("SelectedProduction cannot be null, please use production()");
+        if (selectedRule == null) throw new IllegalArgumentException("SelectedRule cannot be null, please use rule()");
         if (AunitRuntime.getParserFactory() == null) throw new IllegalStateException("Parser factory not set by configuration");
 
-        Parser parser = AunitRuntime.getParserFactory().generate(new CommonTokenStream(tokenSource));
+        Parser parser;
+        RuleReturnScope rs;
+        try
+        {
+            parser = AunitRuntime.getParserFactory().generate(new CommonTokenStream(tokenSource));
 
-        RuleReturnScope rs = selectedProduction.invoke(parser);
+            rs = selectedRule.invoke(parser);
+        }
+        catch (Exception e)
+        {
+            throw new ParserException(e.getMessage());
+        }
 
         ParserWrapper wrapper = (ParserWrapper)parser;
         if (wrapper.isFailOnError() && !wrapper.getErrors().isEmpty())
