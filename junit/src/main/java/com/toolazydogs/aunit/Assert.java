@@ -275,6 +275,60 @@ public class Assert
         assertPreordered(message + ": Expecting " + preorder + " from " + tree.toStringTree(), preorder, tree);
     }
 
+    /**
+     * Asserts a parse tree.
+     *
+     * @param rootText     the text of the root of the tree.
+     * @param preorder     the preorder traversal of the tree.
+     * @param parseResults a helper class
+     */
+    public static void assertTree(String rootText, String preorder, ParseResults parseResults)
+    {
+        assertTree(rootText, preorder, parseResults.getTree());
+    }
+
+    /**
+     * Asserts a parse tree.
+     *
+     * @param rootText     the text of the root of the tree.
+     * @param preorder the preorder traversal of the tree.
+     * @param tree     an ANTLR tree to assert on.
+     */
+    public static void assertTree(String rootText, String preorder, Tree tree)
+    {
+        assertNotNull("tree should be non-null", tree);
+        assertPreordered("Expecting " + preorder + " from " + tree.toStringTree(), preorder, tree);
+        assertEquals("Comparing root text", rootText, tree.getText());
+    }
+
+    /**
+     * Asserts a parse tree.
+     *
+     * @param message      the message to display on failure.
+     * @param rootText     the text of the root of the tree.
+     * @param preorder     the preorder traversal of the tree.
+     * @param parseResults a helper class
+     */
+    public static void assertTree(String message, String rootText, String preorder, ParseResults parseResults)
+    {
+        assertTree(message, rootText, preorder, parseResults.getTree());
+    }
+
+    /**
+     * Asserts a parse tree.
+     *
+     * @param message  the message to display on failure.
+     * @param rootText     the text of the root of the tree.
+     * @param preorder the preorder traversal of the tree.
+     * @param tree     an ANTLR tree to assert on.
+     */
+    public static void assertTree(String message, String rootText, String preorder, Tree tree)
+    {
+        assertNotNull("tree should be non-null", tree);
+        assertEquals(message + " (asserting type of root)", rootText, tree.getText());
+        assertPreordered(message + ": Expecting " + preorder + " from " + tree.toStringTree(), preorder, tree);
+    }
+
     private static void assertPreordered(String message, String preorder, Tree tree)
     {
         try

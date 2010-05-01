@@ -63,6 +63,7 @@ public class CMinusTest
     {
         assertToken(CMinusLexer.ID, "abc", scan("abc"));
 
+        assertTree("=", "(= a (EXPR (+ 1 2)))   ", parse(" a = 1 + 2; ", rule("statement")));
         assertTree(CMinusParser.BLOCK, "(BLOCK  (= a (EXPR (+ 1 2)))  ) ", parse("{ a = 1 + 2; }", rule("block")));
         assertTree(CMinusParser.EXPR, "(EXPR (+ 1 2))", parse("1 + 2", rule("expression", 15)));
     }
