@@ -9,6 +9,6 @@ An ANTLR v3 JUnit testing extension.
 
 ### More Resources ###
 
-*  Discuss XAuth at [http://groups.google.com/group/aunit](http://groups.google.com/group/aunit)
+*  Discuss AUnit at [http://groups.google.com/group/aunit](http://groups.google.com/group/aunit)
 *  Learn even more at [http://wiki.github.com/maguro/aunit/](http://wiki.github.com/maguro/aunit/)
 *  Check out code at [http://github.com/maguro/aunit/](http://github.com/maguro/aunit/)
