@@ -42,4 +42,12 @@ public class ParserException extends RuntimeException
     {
         return messages;
     }
+
+    @Override
+    public String toString()
+    {
+        return "ParserException{" +
+               "messages=" + messages +
+               '}';
+    }
 }
