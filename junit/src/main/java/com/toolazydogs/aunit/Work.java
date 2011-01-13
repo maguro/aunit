@@ -16,20 +16,24 @@
  */
 package com.toolazydogs.aunit;
 
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileInputStream;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
+import com.toolazydogs.aunit.internal.ParserWrapper;
+import org.antlr.runtime.ANTLRInputStream;
 import org.antlr.runtime.ANTLRStringStream;
 import org.antlr.runtime.CommonTokenStream;
 import org.antlr.runtime.Lexer;
 import org.antlr.runtime.Parser;
 import org.antlr.runtime.RuleReturnScope;
 import org.antlr.runtime.tree.Tree;
-
-import com.toolazydogs.aunit.internal.ParserWrapper;
 
 
 /**
@@ -80,6 +84,23 @@ public class Work
         }
 
         throw new Exception("Rule " + rule + " not found");
+    }
+
+    public static <T> T generateParser(String src) throws Exception
+    {
+        List<String> l = Collections.emptyList();
+        ANTLRInputStream input = new ANTLRInputStream(new ByteArrayInputStream(src.getBytes()));
+        Lexer lexer = AunitRuntime.getLexerFactory().generate(input);
+        CommonTokenStream tokens = new CommonTokenStream(lexer);
+        return (T)AunitRuntime.getParserFactory().generate(tokens);
+    }
+
+    public static <T> T generateParser(File src) throws Exception
+    {
+        ANTLRInputStream input = new ANTLRInputStream(new FileInputStream(src));
+        Lexer lexer = AunitRuntime.getLexerFactory().generate(input);
+        CommonTokenStream tokens = new CommonTokenStream(lexer);
+        return (T)AunitRuntime.getParserFactory().generate(tokens);
     }
 
     private static Set<Method> collectMethods(Class clazz)
