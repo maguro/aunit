@@ -1,6 +1,6 @@
 /**
  *
- * Copyright 2010 (C) The original author or authors
+ * Copyright 2010-2011 (C) The original author or authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,7 +22,6 @@ import org.antlr.runtime.CharStream;
 import org.antlr.runtime.Parser;
 import org.antlr.runtime.RecognizerSharedState;
 import org.antlr.runtime.TokenStream;
-import org.objectweb.asm.AnnotationVisitor;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.FieldVisitor;
 import org.objectweb.asm.MethodVisitor;
@@ -85,7 +84,6 @@ public class ParserFactory implements Opcodes
         ClassWriter cw = new ClassWriter(0);
         FieldVisitor fv;
         MethodVisitor mv;
-        AnnotationVisitor av0;
 
         cw.visit(V1_5, ACC_PUBLIC + ACC_SUPER, name, null, parent, new String[]{"com/toolazydogs/aunit/internal/ParserWrapper"});
 
@@ -178,7 +176,7 @@ public class ParserFactory implements Opcodes
 
         byte[] b = cw.toByteArray();
 
-        AunitClassloader ac = new AunitClassloader(parserClass.getClassLoader());
+        AunitClassLoader ac = new AunitClassLoader(parserClass.getClassLoader());
         return ac.defineClass(name.replace('/', '.'), b);
     }
 }

@@ -1,6 +1,6 @@
 /**
  *
- * Copyright 2010 (C) The original author or authors
+ * Copyright 2010-2011 (C) The original author or authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,7 +21,6 @@ import java.lang.reflect.Constructor;
 import org.antlr.runtime.CharStream;
 import org.antlr.runtime.Lexer;
 import org.antlr.runtime.RecognizerSharedState;
-import org.objectweb.asm.AnnotationVisitor;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.FieldVisitor;
 import org.objectweb.asm.MethodVisitor;
@@ -84,7 +83,6 @@ public class LexerFactory implements Opcodes
         ClassWriter cw = new ClassWriter(0);
         FieldVisitor fv;
         MethodVisitor mv;
-        AnnotationVisitor av0;
 
         cw.visit(V1_5, ACC_PUBLIC + ACC_SUPER, name, null, parent, new String[]{"com/toolazydogs/aunit/internal/LexerWrapper"});
 
@@ -194,7 +192,7 @@ public class LexerFactory implements Opcodes
 
         byte[] b = cw.toByteArray();
 
-        AunitClassloader ac = new AunitClassloader(lexerClass.getClassLoader());
+        AunitClassLoader ac = new AunitClassLoader(lexerClass.getClassLoader());
         return ac.defineClass(name.replace('/', '.'), b);
     }
 }

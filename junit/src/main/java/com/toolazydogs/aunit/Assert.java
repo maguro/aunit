@@ -1,6 +1,6 @@
 /**
  *
- * Copyright 2004-2010 (C) The original author or authors
+ * Copyright 2004-2011 (C) The original author or authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,7 +31,6 @@ import com.toolazydogs.aunit.internal.PreorderStream;
 /**
  * @author Jeremy D. Frens (jdfrens@users.sourceforge.net)
  * @author Alan D. Cabrera (adc@toolazydogs.com)
- * @version $Revision: $ $Date: $
  */
 public class Assert
 {
@@ -191,7 +190,7 @@ public class Assert
      * refuteParse(&quot;program&quot;, myTester.scanInput(&quot;5 / * 8&quot;));
      * </pre>
      *
-     * @param rule   the rule to apply from the parser.
+     * @param rule         the rule to apply from the parser.
      * @param lexerResults the result of scanning input with the tester.
      */
     public static void refuteParse(SelectedRule rule, LexerResults lexerResults)
@@ -290,7 +289,7 @@ public class Assert
     /**
      * Asserts a parse tree.
      *
-     * @param rootText     the text of the root of the tree.
+     * @param rootText the text of the root of the tree.
      * @param preorder the preorder traversal of the tree.
      * @param tree     an ANTLR tree to assert on.
      */
@@ -318,7 +317,7 @@ public class Assert
      * Asserts a parse tree.
      *
      * @param message  the message to display on failure.
-     * @param rootText     the text of the root of the tree.
+     * @param rootText the text of the root of the tree.
      * @param preorder the preorder traversal of the tree.
      * @param tree     an ANTLR tree to assert on.
      */

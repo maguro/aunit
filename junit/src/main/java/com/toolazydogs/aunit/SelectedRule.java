@@ -1,6 +1,6 @@
 /**
  *
- * Copyright 2010 (C) The original author or authors
+ * Copyright 2010-2011 (C) The original author or authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,22 +23,42 @@ import org.antlr.runtime.RuleReturnScope;
 
 
 /**
- * @version $Revision: $ $Date: $
+ * Holds a selected parser method and its arguments for subsequent invocation.
+ *
+ * @see Work#rule(String, Object...)
  */
 class SelectedRule
 {
     private final Method method;
-    private Object[] arguments;
+    private final Object[] arguments;
 
+    /**
+     * Initialize an instance with a selected parser method and its arguments
+     * for subsequent invocation
+     *
+     * @param method    the selected parser method
+     * @param arguments the arguments to use when invoking the method
+     */
     SelectedRule(Method method, Object... arguments)
     {
+        assert method != null;
+        assert arguments != null;
+
         this.method = method;
         this.arguments = arguments;
-
     }
 
+    /**
+     * Invoke the selected parser method with its arguments
+     *
+     * @param parser the parser whose method will be invoked
+     * @return the <code>RuleReturnScope</code> returned by the parser
+     * @throws Exception if an error occurs
+     */
     RuleReturnScope invoke(Parser parser) throws Exception
     {
+        assert parser != null;
+
         return (RuleReturnScope)method.invoke(parser, arguments);
     }
 }

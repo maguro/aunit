@@ -1,6 +1,6 @@
 /**
  *
- * Copyright 2010 (C) The original author or authors
+ * Copyright 2010-2011 (C) The original author or authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,22 +22,23 @@ import java.util.logging.Logger;
 /**
  * @version $Revision: $ $Date: $
  */
-public class AunitClassloader extends ClassLoader
+public class AunitClassLoader extends ClassLoader
 {
-    private final static String CLASS_NAME = AunitClassloader.class.getName();
+    private final static String CLASS_NAME = AunitClassLoader.class.getName();
     private final static Logger LOGGER = Logger.getLogger(CLASS_NAME);
 
-    public AunitClassloader(ClassLoader parent)
+    public AunitClassLoader(ClassLoader parent)
     {
         super(parent);
     }
 
-    public AunitClassloader()
+    public AunitClassLoader()
     {
     }
 
-    public Class defineClass(String name, byte[] b)
+    @SuppressWarnings({"unchecked"})
+    public <T> Class<T> defineClass(String name, byte[] b)
     {
-        return defineClass(name, b, 0, b.length);
+        return (Class<T>)defineClass(name, b, 0, b.length);
     }
 }

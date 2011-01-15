@@ -1,6 +1,6 @@
 /**
  *
- * Copyright 2010 (C) The original author or authors
+ * Copyright 2010-2011 (C) The original author or authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,10 +23,8 @@ import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
-import com.toolazydogs.aunit.internal.ParserWrapper;
 import org.antlr.runtime.ANTLRInputStream;
 import org.antlr.runtime.ANTLRStringStream;
 import org.antlr.runtime.CommonTokenStream;
@@ -35,12 +33,26 @@ import org.antlr.runtime.Parser;
 import org.antlr.runtime.RuleReturnScope;
 import org.antlr.runtime.tree.Tree;
 
+import com.toolazydogs.aunit.internal.ParserWrapper;
+
 
 /**
- * @version $Revision: $ $Date: $
+ * A holder of static methods that assist in testing.
+ * <p/>
+ * These methods will usually feed results into methods of {@link Assert}.
+ *
+ * @see Assert
  */
-public class Work
+public final class Work
 {
+    /**
+     * Scans a set of characters and returns results which can be fed into
+     * <code>Assert.assertToken(...)</code>.
+     *
+     * @param characters the characters to be scanned
+     * @return results from the lexer that can be used by assert
+     * @throws Exception if there is an error obtaining the lexer results
+     */
     public static LexerResults scan(String characters) throws Exception
     {
         if (characters == null) throw new IllegalArgumentException("Characters cannot be null");
@@ -50,14 +62,29 @@ public class Work
         return new LexerResults(lexer);
     }
 
-    public static Tree parse(String stream, SelectedRule selectedRule) throws Exception
+    /**
+     * Parse a set of characters and return an instance of {@link Tree}.
+     * This tree can then be fed into <code>Assert.assertTree(...)</code>.
+     * <p/>
+     * This method will throw an exception if there was an error parsing.  It
+     * will also throw {@link ParserException} if the parsing failed and the
+     * test has indicated that the parser should fail on error; see
+     * {@link ParserOption#failOnError(boolean)}.
+     *
+     * @param characters   the characters to be parsed
+     * @param selectedRule the starting rule
+     * @return the tree that results from a successful parse
+     * @throws Exception if there is an error parsing the characters
+     * @see #rule(String, Object...)
+     */
+    public static Tree parse(String characters, SelectedRule selectedRule) throws Exception
     {
-        if (stream == null) throw new IllegalArgumentException("Stream cannot be null");
+        if (characters == null) throw new IllegalArgumentException("Characters cannot be null");
         if (selectedRule == null) throw new IllegalArgumentException("SelectedRule cannot be null, please use rule()");
         if (AunitRuntime.getLexerFactory() == null) throw new IllegalStateException("Lexer factory not set by configuration");
         if (AunitRuntime.getParserFactory() == null) throw new IllegalStateException("Parser factory not set by configuration");
 
-        Lexer lexer = AunitRuntime.getLexerFactory().generate(new ANTLRStringStream(stream));
+        Lexer lexer = AunitRuntime.getLexerFactory().generate(new ANTLRStringStream(characters));
         Parser parser = AunitRuntime.getParserFactory().generate(new CommonTokenStream(lexer));
 
         RuleReturnScope rs = selectedRule.invoke(parser);
@@ -71,6 +98,15 @@ public class Work
         return (Tree)rs.getTree();
     }
 
+    /**
+     * Select a rule to be used as a starting point in
+     *
+     * @param rule      the name of the rule to select
+     * @param arguments arguments to be passed in the invocation of the rule when parsing
+     * @return the selected rule
+     * @throws Exception if no rule can be found
+     * @see #parse(String, SelectedRule)
+     */
     public static SelectedRule rule(String rule, Object... arguments) throws Exception
     {
         if (AunitRuntime.getParserFactory() == null) throw new IllegalStateException("Parser factory not set by configuration");
@@ -86,23 +122,49 @@ public class Work
         throw new Exception("Rule " + rule + " not found");
     }
 
+    /**
+     * Generate an instance of the configured parser using a string as a
+     * source for input.
+     *
+     * @param src the string to use as input to the new parser instance.
+     * @param <T> the type of the parser
+     * @return an instance of the configured parser
+     * @throws Exception if there is an error generating the parser
+     */
     public static <T> T generateParser(String src) throws Exception
     {
-        List<String> l = Collections.emptyList();
         ANTLRInputStream input = new ANTLRInputStream(new ByteArrayInputStream(src.getBytes()));
         Lexer lexer = AunitRuntime.getLexerFactory().generate(input);
         CommonTokenStream tokens = new CommonTokenStream(lexer);
+        //noinspection unchecked
         return (T)AunitRuntime.getParserFactory().generate(tokens);
     }
 
+    /**
+     * Generate an instance of the configured parser using a file as a
+     * source for input.
+     *
+     * @param src the file to use as input to the new parser instance.
+     * @param <T> the type of the parser
+     * @return an instance of the configured parser
+     * @throws Exception if there is an error generating the parser
+     */
     public static <T> T generateParser(File src) throws Exception
     {
         ANTLRInputStream input = new ANTLRInputStream(new FileInputStream(src));
         Lexer lexer = AunitRuntime.getLexerFactory().generate(input);
         CommonTokenStream tokens = new CommonTokenStream(lexer);
+        //noinspection unchecked
         return (T)AunitRuntime.getParserFactory().generate(tokens);
     }
 
+    /**
+     * Recursively collect the set of declared methods of a class and
+     * its super class.
+     *
+     * @param clazz the class whose methods to collect
+     * @return the set of declared methods of a class
+     */
     private static Set<Method> collectMethods(Class clazz)
     {
         if (clazz == null) return Collections.emptySet();

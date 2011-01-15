@@ -1,6 +1,6 @@
 /**
  *
- * Copyright 2010 (C) The original author or authors
+ * Copyright 2010-2011 (C) The original author or authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,11 +31,10 @@ import com.toolazydogs.aunit.Option;
  */
 public class DefaultCompositeOption implements CompositeOption
 {
-
     /**
      * Composite options (cannot be null).
      */
-    private final List<Option> m_options;
+    private final List<Option> options = new ArrayList<Option>();
 
     /**
      * Constructor.
@@ -44,7 +43,6 @@ public class DefaultCompositeOption implements CompositeOption
      */
     public DefaultCompositeOption(final Option... options)
     {
-        m_options = new ArrayList<Option>();
         add(options);
     }
 
@@ -53,7 +51,6 @@ public class DefaultCompositeOption implements CompositeOption
      */
     public DefaultCompositeOption()
     {
-        this(new Option[0]);
     }
 
     /**
@@ -61,7 +58,7 @@ public class DefaultCompositeOption implements CompositeOption
      */
     public Option[] getOptions()
     {
-        return OptionUtils.expand(m_options.toArray(new Option[m_options.size()]));
+        return OptionUtils.expand(options.toArray(new Option[options.size()]));
     }
 
     /**
@@ -74,7 +71,7 @@ public class DefaultCompositeOption implements CompositeOption
     {
         if (options != null)
         {
-            m_options.addAll(Arrays.asList(options));
+            this.options.addAll(Arrays.asList(options));
         }
         return this;
     }
@@ -87,7 +84,7 @@ public class DefaultCompositeOption implements CompositeOption
     {
         final StringBuilder sb = new StringBuilder();
         sb.append("DefaultCompositeOption");
-        sb.append("{options=").append(m_options);
+        sb.append("{options=").append(options);
         sb.append('}');
         return sb.toString();
     }
@@ -99,7 +96,7 @@ public class DefaultCompositeOption implements CompositeOption
             final List<Statement> statements = new ArrayList<Statement>();
 
             {
-                for (Option option : m_options) statements.add(option.generateSetupStatement());
+                for (Option option : options) statements.add(option.generateSetupStatement());
             }
 
             @Override
@@ -117,7 +114,7 @@ public class DefaultCompositeOption implements CompositeOption
             final List<Statement> statements = new ArrayList<Statement>();
 
             {
-                for (Option option : m_options) statements.add(option.generateTeardownStatement());
+                for (Option option : options) statements.add(option.generateTeardownStatement());
             }
 
             @Override

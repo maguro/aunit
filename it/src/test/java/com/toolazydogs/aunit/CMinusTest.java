@@ -1,6 +1,6 @@
 /**
  *
- * Copyright 2010 (C) The original author or authors
+ * Copyright 2010-2011 (C) The original author or authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,7 +33,7 @@ import com.toolazydogs.aunit.tests.CMinusParser;
 
 
 /**
- * @version $Revision: $ $Date: $
+ *
  */
 @RunWith(AntlrTestRunner.class)
 public class CMinusTest
@@ -97,5 +97,4 @@ public class CMinusTest
         {
         }
     }
-
 }
