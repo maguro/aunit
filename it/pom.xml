@@ -6,10 +6,10 @@
     <parent>
         <groupId>com.toolazydogs.aunit</groupId>
         <artifactId>aunit-project</artifactId>
-        <version>1.0.0-SNAPSHOT</version>
+        <version>1.0.0</version>
     </parent>
 
-    <artifactId>antlr-junit-it</artifactId>
+    <artifactId>aunit-junit-it</artifactId>
     <name>ANTLR Unit Testing Framework :: Integration Tests</name>
     <packaging>jar</packaging>
 
@@ -41,7 +41,7 @@
 
         <dependency>
             <groupId>com.toolazydogs.aunit</groupId>
-            <artifactId>antlr-junit</artifactId>
+            <artifactId>aunit-junit</artifactId>
             <version>${project.version}</version>
             <scope>test</scope>
         </dependency>
