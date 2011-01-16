@@ -23,7 +23,7 @@ import com.toolazydogs.aunit.internal.LexerFactory;
 
 
 /**
- * @version $Revision: $ $Date: $
+ * Lexer options to be used for configuring tests.
  */
 class LexerOption implements Option
 {
@@ -32,6 +32,8 @@ class LexerOption implements Option
 
     LexerOption(Class<? extends Lexer> lexerClass)
     {
+        assert lexerClass != null;
+
         this.lexerClass = lexerClass;
     }
 
@@ -40,23 +42,49 @@ class LexerOption implements Option
         return lexerClass;
     }
 
+    /**
+     * Determine if the lexer will throw an exception if there is an error
+     * during a lexical analysis.
+     *
+     * @return <code>true</code> if the lexer will throw an exception if there
+     *         is an error during a lexical analysis, <code>false</code>
+     *         otherwise
+     */
     boolean isFailOnError()
     {
         return failOnError;
     }
 
+    /**
+     * Direct that a lexer is to throw an exception if there is an error
+     * during a lexical analysis.
+     *
+     * @return this lexer option for more configuration
+     */
     LexerOption failOnError()
     {
         failOnError = true;
         return this;
     }
 
+    /**
+     * Direct that a lexer is to throw an exception if there is an error
+     * during a lexical analysis.
+     *
+     * @param fail <code>true</code> if the lexer is to throw an exception if
+     *             there is an error during a lexical analysis,
+     *             <code>false</code> otherwise
+     * @return this lexer option for more configuration
+     */
     LexerOption failOnError(boolean fail)
     {
         failOnError = fail;
         return this;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public Statement generateSetupStatement()
     {
         return new Statement()
@@ -69,6 +97,9 @@ class LexerOption implements Option
         };
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public Statement generateTeardownStatement()
     {
         return new Statement()

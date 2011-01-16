@@ -36,7 +36,6 @@ import com.toolazydogs.aunit.Option;
  * {@link Configuration} annotation, has no parameters and has an {@link Option} array as return value.
  *
  * @author Alin Dreghiciu (adreghiciu@gmail.com)
- * @version $Revision: $ $Date: $
  */
 public class AnnotatedWithConfiguration implements AntlrConfigMethods
 {

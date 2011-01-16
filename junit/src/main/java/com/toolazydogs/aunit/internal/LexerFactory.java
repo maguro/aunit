@@ -28,7 +28,7 @@ import org.objectweb.asm.Opcodes;
 
 
 /**
- * @version $Revision: $ $Date: $
+ *
  */
 public class LexerFactory implements Opcodes
 {

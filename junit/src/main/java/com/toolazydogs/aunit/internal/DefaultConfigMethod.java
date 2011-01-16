@@ -35,7 +35,6 @@ import com.toolazydogs.aunit.RequiresConfiguration;
  * Configuration method marked with {@link Configuration} and {@link RequiresConfiguration} annotations.
  *
  * @author Alin Dreghiciu (adreghiciu@gmail.com)
- * @version $Revision: $ $Date: $
  */
 public class DefaultConfigMethod extends AntlrConfigMethod
 {

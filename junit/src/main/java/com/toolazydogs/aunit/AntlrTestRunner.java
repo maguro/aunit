@@ -37,7 +37,6 @@ import com.toolazydogs.aunit.internal.RunBefores;
 /**
  * @author Alin Dreghiciu (adreghiciu@gmail.com)
  * @author Alan D. Cabrera (adc@toolazydogs.com)
- * @version $Revision: $ $Date: $
  */
 public class AntlrTestRunner extends BlockJUnit4ClassRunner
 {

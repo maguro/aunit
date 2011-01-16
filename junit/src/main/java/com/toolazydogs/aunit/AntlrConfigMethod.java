@@ -29,7 +29,6 @@ import com.toolazydogs.aunit.internal.Util;
  *
  * @author Alin Dreghiciu (adreghiciu@gmail.com)
  * @author Alan D. Cabrera (adc@toolazydogs.com)
- * @version $Revision: $ $Date: $
  */
 public abstract class AntlrConfigMethod extends FrameworkMethod
 {

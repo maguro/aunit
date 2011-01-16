@@ -29,7 +29,6 @@ import com.toolazydogs.aunit.Option;
  * Utility methods related to {@link Option}s.
  *
  * @author Alin Dreghiciu (adreghiciu@gmail.com)
- * @version $Revision: $ $Date: $
  */
 public class OptionUtils
 {

@@ -22,7 +22,7 @@ import org.junit.runners.model.Statement;
 
 
 /**
- * @version $Revision: $ $Date: $
+ *
  */
 public class RunBefores extends Statement
 {

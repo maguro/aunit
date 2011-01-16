@@ -28,7 +28,10 @@ import com.toolazydogs.aunit.internal.ParserWrapper;
 
 
 /**
- * @version $Revision: $ $Date: $
+ * A wrapper to various lexer token sources and results.  Used to provide type safety for
+ * method arguments of {@link Assert}.
+ *
+ * @see Assert
  */
 class LexerResults
 {

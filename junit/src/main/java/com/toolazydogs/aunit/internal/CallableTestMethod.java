@@ -23,7 +23,6 @@ import java.lang.reflect.InvocationTargetException;
  * A callable test method.
  *
  * @author Toni Menzel (tonit)
- * @version $Revision: $ $Date: $
  */
 public interface CallableTestMethod
 {

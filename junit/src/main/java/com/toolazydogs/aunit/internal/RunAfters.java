@@ -24,7 +24,7 @@ import org.junit.runners.model.Statement;
 
 
 /**
- * @version $Revision: $ $Date: $
+ *
  */
 public class RunAfters extends Statement
 {

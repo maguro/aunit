@@ -17,7 +17,7 @@
 package com.toolazydogs.aunit.internal;
 
 /**
- * @version $Revision: $ $Date: $
+ *
  */
 public class PreorderStream
 {

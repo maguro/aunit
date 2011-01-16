@@ -29,18 +29,9 @@ import com.toolazydogs.aunit.internal.DefaultCompositeOption;
  * @author Alin Dreghiciu (adreghiciu@gmail.com)
  * @author Toni Menzel (toni@okidokiteam.com)
  * @author Alan D. Cabrera (adc@toolazydogs.com)
- * @version $Revision: $ $Date: $
  */
 public class CoreOptions
 {
-    /**
-     * Utility class. Meant to be used via the static factory methods.
-     */
-    private CoreOptions()
-    {
-        // utility class
-    }
-
     /**
      * Convenience method (more to be used for a nice fluent api) for creating an array of options.
      * It also expands the composite options.
@@ -86,4 +77,12 @@ public class CoreOptions
     {
         return new ParserOption(parserClass);
     }
+
+    /**
+     * Utility class. Meant to be used via the static factory methods.
+     */
+    private CoreOptions()
+    {
+    }
+
 }

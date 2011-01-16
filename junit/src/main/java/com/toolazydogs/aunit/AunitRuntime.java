@@ -26,9 +26,9 @@ import com.toolazydogs.aunit.internal.TreeParserFactory;
 
 
 /**
- * @version $Revision: $ $Date: $
+ * A central place for data for tests
  */
-class AunitRuntime
+final class AunitRuntime
 {
     private final static ThreadLocal<LexerFactory> LEXER_FACTORY = new ThreadLocal<LexerFactory>();
     private final static ThreadLocal<ParserFactory> PARSER_FACTORY = new ThreadLocal<ParserFactory>();

@@ -20,7 +20,7 @@ import java.util.logging.Logger;
 
 
 /**
- * @version $Revision: $ $Date: $
+ *
  */
 public class AunitClassLoader extends ClassLoader
 {

@@ -29,7 +29,6 @@ import com.toolazydogs.aunit.internal.DefaultCompositeOption;
  *
  * @author Toni Menzel (tonit)
  * @author Alin Dreghiciu (adreghiciu@gmail.com)
- * @version $Revision: $ $Date: $
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.METHOD, ElementType.TYPE})

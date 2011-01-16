@@ -20,7 +20,6 @@ package com.toolazydogs.aunit;
  * An option composed of other options.
  *
  * @author Alin Dreghiciu (adreghiciu@gmail.com)
- * @version $Revision: $ $Date: $
  */
 public interface CompositeOption extends Option
 {

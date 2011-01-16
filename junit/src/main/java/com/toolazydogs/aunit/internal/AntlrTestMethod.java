@@ -32,7 +32,6 @@ import com.toolazydogs.aunit.Option;
  *
  * @author Alin Dreghiciu (adreghiciu@gmail.com)
  * @author Alan D. Cabrera (adc@toolazydogs.com)
- * @version $Revision: $ $Date: $
  */
 public class AntlrTestMethod extends Statement
 {

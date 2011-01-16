@@ -23,7 +23,7 @@ import com.toolazydogs.aunit.internal.ParserFactory;
 
 
 /**
- * @version $Revision: $ $Date: $
+ * Parser options to be used for configuring tests.
  */
 class ParserOption implements Option
 {
@@ -32,6 +32,8 @@ class ParserOption implements Option
 
     ParserOption(Class<? extends Parser> parserClass)
     {
+        assert parserClass != null;
+
         this.parserClass = parserClass;
     }
 
@@ -40,23 +42,48 @@ class ParserOption implements Option
         return parserClass;
     }
 
+    /**
+     * Determine if the parser will throw an exception if there is an error
+     * during a parse.
+     *
+     * @return <code>true</code> if the parser will throw an exception if there
+     *         is an error during a parse, <code>false</code> otherwise
+     */
     boolean isFailOnError()
     {
         return failOnError;
     }
 
+    /**
+     * Direct that a parser is to throw an exception if there is an error
+     * during a parse.
+     *
+     * @return this parser option for more configuration
+     */
     ParserOption failOnError()
     {
         failOnError = true;
         return this;
     }
 
+    /**
+     * Direct that a parser is to throw an exception if there is an error
+     * during a parse.
+     *
+     * @param fail <code>true</code> if the parser is to throw an exception if
+     *             there is an error during a parse, <code>false</code>
+     *             otherwise
+     * @return this parser option for more configuration
+     */
     ParserOption failOnError(boolean fail)
     {
         failOnError = fail;
         return this;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public Statement generateSetupStatement()
     {
         return new Statement()
@@ -69,6 +96,9 @@ class ParserOption implements Option
         };
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public Statement generateTeardownStatement()
     {
         return new Statement()

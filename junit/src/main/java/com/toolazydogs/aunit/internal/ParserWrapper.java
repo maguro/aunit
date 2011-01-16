@@ -20,7 +20,7 @@ import java.util.List;
 
 
 /**
- * @version $Revision: $ $Date: $
+ *
  */
 public interface ParserWrapper
 {

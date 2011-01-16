@@ -30,7 +30,6 @@ import java.lang.annotation.Target;
  * This approach makes configuration+test method coupling independent from naming of methods (different from AppliesTo Annotation).
  *
  * @author Toni Menzel (toni@okidokiteam.com)
- * @version $Revision: $ $Date: $
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)

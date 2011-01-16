@@ -27,7 +27,6 @@ import com.toolazydogs.aunit.AntlrConfigMethod;
  * Configuration strategy. Finds configuration methods.
  *
  * @author Alin Dreghiciu (adreghiciu@gmail.com)
- * @version $Revision: $ $Date: $
  */
 public interface AntlrConfigMethods
 {

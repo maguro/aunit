@@ -31,7 +31,7 @@ import com.toolazydogs.aunit.Option;
 
 
 /**
- * @version $Revision: $ $Date: $
+ *
  */
 public class AppliesToConfigMethod extends AntlrConfigMethod
 {

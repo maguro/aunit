@@ -20,7 +20,10 @@ import org.antlr.runtime.tree.Tree;
 
 
 /**
- * @version $Revision: $ $Date: $
+ * A wrapper to an instance of a {@link Tree}.  Used to provide type safety for
+ * method arguments of {@link Assert}.
+ *
+ * @see Assert
  */
 class ParseResults
 {
@@ -28,6 +31,8 @@ class ParseResults
 
     ParseResults(Tree tree)
     {
+        assert tree != null;
+
         this.tree = tree;
     }
 

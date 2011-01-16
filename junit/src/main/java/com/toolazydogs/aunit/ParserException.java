@@ -21,28 +21,46 @@ import java.util.List;
 
 
 /**
- * @version $Revision: $ $Date: $
+ * Instances of <code>ParserException</code> are used to indicate that an error
+ * occurred during parsing of a character stream.
  */
 public class ParserException extends RuntimeException
 {
     private List<String> messages;
 
+    /**
+     * {@inheritDoc}
+     */
     public ParserException(String message)
     {
         super(message);
         this.messages = Collections.singletonList(message);
     }
 
+    /**
+     * Constructs a parser exception with a list of error messages.
+     *
+     * @param messages the list of error messages to associate with the
+     *                 exception, usually explaining the cause of the exception
+     */
     public ParserException(List<String> messages)
     {
         this.messages = messages;
     }
 
+    /**
+     * Return the list of error messages.
+     *
+     * @return the list of error messages
+     */
     public List<String> getMessages()
     {
         return messages;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String toString()
     {

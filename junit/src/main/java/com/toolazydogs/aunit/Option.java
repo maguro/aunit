@@ -23,11 +23,20 @@ import org.junit.runners.model.Statement;
  * Marker interface for integration test user specified options.
  *
  * @author Alin Dreghiciu (adreghiciu@gmail.com)
- * @version $Revision: $ $Date: $
  */
 public interface Option
 {
+    /**
+     * Generate statements to be executed during test setup.
+     *
+     * @return the statement to execute when a test is being setup
+     */
     Statement generateSetupStatement();
 
+    /**
+     * Generate statements to be executed during test teardown.
+     *
+     * @return the statement to execute when a test is being torn down.
+     */
     Statement generateTeardownStatement();
 }

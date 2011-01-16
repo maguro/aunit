@@ -29,7 +29,7 @@ import org.objectweb.asm.Opcodes;
 
 
 /**
- * @version $Revision: $ $Date: $
+ *
  */
 public class ParserFactory implements Opcodes
 {

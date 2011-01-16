@@ -28,7 +28,6 @@ import java.lang.annotation.Target;
  * A configuration method can match multiple test methods, case when the options will be merged.
  *
  * @author Alin Dreghiciu (adreghiciu@gmail.com)
- * @version $Revision: $ $Date: $
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)

@@ -30,7 +30,6 @@ import com.toolazydogs.aunit.internal.AntlrConfigMethods;
  * Allows a pluggable configuration strategy for Pax Exam JUnit tests.
  *
  * @author Alin Dreghiciu (adreghiciu@gmail.com)
- * @version $Revision: $ $Date: $
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)

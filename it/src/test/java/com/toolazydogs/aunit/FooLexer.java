@@ -28,8 +28,6 @@ import com.toolazydogs.aunit.tests.CMinusLexer;
 
 /**
  * Fake lexer to help w/ ASM investigation on extending existing lexers.
- *
- * @version $Revision: $ $Date: $
  */
 public class FooLexer extends CMinusLexer implements LexerWrapper
 {
