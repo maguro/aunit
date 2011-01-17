@@ -25,7 +25,7 @@ import com.toolazydogs.aunit.internal.LexerFactory;
 /**
  * Lexer options to be used for configuring tests.
  */
-class LexerOption implements Option
+public class LexerOption implements Option
 {
     private final Class<? extends Lexer> lexerClass;
     private boolean failOnError = true;
@@ -61,7 +61,7 @@ class LexerOption implements Option
      *
      * @return this lexer option for more configuration
      */
-    LexerOption failOnError()
+    public LexerOption failOnError()
     {
         failOnError = true;
         return this;
@@ -76,7 +76,7 @@ class LexerOption implements Option
      *             <code>false</code> otherwise
      * @return this lexer option for more configuration
      */
-    LexerOption failOnError(boolean fail)
+    public LexerOption failOnError(boolean fail)
     {
         failOnError = fail;
         return this;
