@@ -25,7 +25,7 @@ import com.toolazydogs.aunit.internal.ParserFactory;
 /**
  * Parser options to be used for configuring tests.
  */
-class ParserOption implements Option
+public class ParserOption implements Option
 {
     private final Class<? extends Parser> parserClass;
     private boolean failOnError = true;
@@ -60,7 +60,7 @@ class ParserOption implements Option
      *
      * @return this parser option for more configuration
      */
-    ParserOption failOnError()
+    public ParserOption failOnError()
     {
         failOnError = true;
         return this;
@@ -75,7 +75,7 @@ class ParserOption implements Option
      *             otherwise
      * @return this parser option for more configuration
      */
-    ParserOption failOnError(boolean fail)
+    public ParserOption failOnError(boolean fail)
     {
         failOnError = fail;
         return this;
