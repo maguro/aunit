@@ -192,7 +192,7 @@ public class LexerFactory implements Opcodes
 
         byte[] b = cw.toByteArray();
 
-        AunitClassLoader ac = new AunitClassLoader(lexerClass.getClassLoader());
+        AunitClassloader ac = new AunitClassloader(lexerClass.getClassLoader());
         return ac.defineClass(name.replace('/', '.'), b);
     }
 }

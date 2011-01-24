@@ -176,7 +176,7 @@ public class ParserFactory implements Opcodes
 
         byte[] b = cw.toByteArray();
 
-        AunitClassLoader ac = new AunitClassLoader(parserClass.getClassLoader());
+        AunitClassloader ac = new AunitClassloader(parserClass.getClassLoader());
         return ac.defineClass(name.replace('/', '.'), b);
     }
 }
