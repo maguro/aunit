@@ -22,17 +22,17 @@ import java.util.logging.Logger;
 /**
  *
  */
-public class AunitClassLoader extends ClassLoader
+public class AunitClassloader extends ClassLoader
 {
-    private final static String CLASS_NAME = AunitClassLoader.class.getName();
+    private final static String CLASS_NAME = AunitClassloader.class.getName();
     private final static Logger LOGGER = Logger.getLogger(CLASS_NAME);
 
-    public AunitClassLoader(ClassLoader parent)
+    public AunitClassloader(ClassLoader parent)
     {
         super(parent);
     }
 
-    public AunitClassLoader()
+    public AunitClassloader()
     {
     }
 
