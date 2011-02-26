@@ -38,44 +38,104 @@ import com.toolazydogs.aunit.tests.CMinusParser;
 @RunWith(AntlrTestRunner.class)
 public class CMinusTest
 {
+    /**
+     * Configuration for tests whose name starts with "test".
+     * <p/>
+     * This is a simple example of how to assign a different configuration to
+     * tests whose name starts with "test".
+     *
+     * @return a configuration for tests whose name starts with "test"
+     */
     @Configuration
     @AppliesTo("test.*")
     public static Option[] configureTest()
     {
         return options(
-                lexer(CMinusLexer.class).failOnError(),
-                parser(CMinusParser.class).failOnError()
+                lexer(CMinusLexer.class),
+                parser(CMinusParser.class)
         );
     }
 
+    /**
+     * Configuration for tests that will not fail on lexer/parse errors.
+     * <p/>
+     * This is a simple example of how to assign a different configuration to
+     * a set of tests.
+     *
+     * @return a configuration for tests that will not fail on lexer/parse errors
+     */
     @Configuration
-    @AppliesTo("specialTest")
+    @AppliesTo("oddballTest")
     public static Option[] configureSpecial()
     {
         return options(
-                lexer(CMinusLexer.class).failOnError(),
-                parser(CMinusParser.class).failOnError()
+                lexer(CMinusLexer.class).failOnError(false),
+                parser(CMinusParser.class).failOnError(false)
         );
     }
 
     @Test
     public void test() throws Exception
     {
-        assertToken(CMinusLexer.ID, "abc", scan("abc"));
+        try
+        {
+            parse("+ 1 2", rule("expression", 15));
+            fail("Should have failed parsing");
+        }
+        catch (ParserException e)
+        {
+        }
+    }
 
+    @Test
+    public void testOne() throws Exception
+    {
+        /**
+         * Here's an example of specifying token type to be returned by the lexer
+         */
+        assertToken(CMinusLexer.ID, "abc", scan("abc"));
+    }
+
+    @Test
+    public void testTwo() throws Exception
+    {
+        /**
+         * Here's an example of specifying the text of the root token
+         */
         assertTree("=", "(= a (EXPR (+ 1 2)))   ", parse(" a = 1 + 2; ", rule("statement")));
+
+        /**
+         * Here's an example of specifying an imaginary token that should be at the root of the tree
+         */
         assertTree(CMinusParser.BLOCK, "(BLOCK  (= a (EXPR (+ 1 2)))  ) ", parse("{ a = 1 + 2; }", rule("block")));
+
+        /**
+         * Here's an example of invoking a rule that takes parameters
+         */
         assertTree(CMinusParser.EXPR, "(EXPR (+ 1 2))", parse("1 + 2", rule("expression", 15)));
     }
 
     @Test
-    public void specialTest() throws Exception
+    public void oddballTest() throws Exception
     {
-        assertToken(CMinusLexer.ID, "abc", scan("abc"));
-
-        assertTree(CMinusParser.EXPR, "(EXPR (+ 1 2))", parse("1 + 2", rule("expression", 15)));
+        try
+        {
+            parse("+ 1 2", rule("expression", 15));
+        }
+        catch (ParserException e)
+        {
+            fail("This configuration should not have thrown an exception");
+        }
     }
 
+    /**
+     * This test does not have a name of "oddballTest" or that begins with
+     * "test" and so using the static assert methods will throw
+     * {@link IllegalStateException} to indicate that the test was not
+     * configured.
+     *
+     * @throws Exception if there is an error scanning or parsing
+     */
     @Test
     public void unconfiguredTest() throws Exception
     {
