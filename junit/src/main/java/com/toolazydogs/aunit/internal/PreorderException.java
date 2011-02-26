@@ -21,22 +21,30 @@ package com.toolazydogs.aunit.internal;
  */
 public class PreorderException extends Exception
 {
-    public PreorderException()
+    private final String pretty;
+    private final String expected;
+    private final String found;
+
+    public PreorderException(String pretty, String expected, String found)
     {
+        this.pretty = pretty;
+        this.expected = expected;
+        this.found = found;
     }
 
-    public PreorderException(String message)
+
+    public String getPretty()
     {
-        super(message);
+        return pretty;
     }
 
-    public PreorderException(String message, Throwable cause)
+    public String getExpected()
     {
-        super(message, cause);
+        return expected;
     }
 
-    public PreorderException(Throwable cause)
+    public String getFound()
     {
-        super(cause);
+        return found;
     }
 }

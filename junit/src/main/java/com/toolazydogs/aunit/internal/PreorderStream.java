@@ -23,6 +23,9 @@ public class PreorderStream
 {
     private final String characters;
     private int ptr = 0;
+    private StringBuilder pretty = new StringBuilder();
+    private int indent = -1;
+    private boolean tokenRead = false;
 
     public PreorderStream(String characters)
     {
@@ -33,7 +36,11 @@ public class PreorderStream
     public String token()
     {
         while (ptr < characters.length() && Character.isWhitespace(characters.charAt(ptr))) ptr++;
-        int start = ptr;
+
+        if (tokenRead) pretty.append(" ");
+        else tokenRead = true;
+
+        String token;
         boolean quoted = characters.charAt(ptr) == '\'';
         if (quoted)
         {
@@ -48,10 +55,13 @@ public class PreorderStream
             }
             ptr++;
 
-            return builder.toString();
+            token = builder.toString();
+
+            pretty.append("'").append(token).append("'");
         }
         else
         {
+            int start = ptr;
             while (ptr < characters.length()
                    && !Character.isWhitespace(characters.charAt(ptr))
                    && characters.charAt(ptr) != '('
@@ -59,22 +69,41 @@ public class PreorderStream
             {
                 ptr++;
             }
-            return characters.substring(start, ptr);
+            token = characters.substring(start, ptr);
+
+            pretty.append(token);
         }
+
+
+        return token;
     }
 
     public void leftparen() throws PreorderException
     {
         while (ptr < characters.length() && Character.isWhitespace(characters.charAt(ptr)) && characters.charAt(ptr) != '(') ptr++;
-        if (characters.charAt(ptr) != '(') throw new PreorderException("Should have consumed a '('");
+        if (characters.charAt(ptr) != '(') throw new PreorderException(prettyString(), "(", erroneousToken());
         ptr++;
+
+        tokenRead = false;
+        if (pretty.length() != 0) pretty.append("\n");
+        indent++;
+        printIndent(pretty).append("(");
     }
 
     public void rightparen() throws PreorderException
     {
         while (ptr < characters.length() && Character.isWhitespace(characters.charAt(ptr)) && characters.charAt(ptr) != ')') ptr++;
-        if (characters.charAt(ptr) != ')') throw new PreorderException("Should have consumed a ')'");
+        if (characters.charAt(ptr) != ')') throw new PreorderException(prettyString(), ")", erroneousToken());
         ptr++;
+
+        indent--;
+        pretty.append(")");
+    }
+
+    public void done() throws PreorderException
+    {
+        while (ptr < characters.length() && Character.isWhitespace(characters.charAt(ptr))) ptr++;
+        if (ptr < characters.length()) throw new PreorderException(prettyString(), "<EOD>", erroneousToken());
     }
 
     @Override
@@ -83,9 +112,50 @@ public class PreorderStream
         return characters.substring(ptr);
     }
 
-    public void done() throws PreorderException
+    public String prettyString()
     {
-        while (ptr < characters.length() && Character.isWhitespace(characters.charAt(ptr))) ptr++;
-        if (ptr < characters.length()) throw new PreorderException("Should have nothing left to consume");
+        return pretty.toString();
+    }
+
+    private StringBuilder printIndent(StringBuilder sb)
+    {
+        for (int i = 0; i < indent; i++) sb.append("  ");
+        return sb;
+    }
+
+    private String erroneousToken()
+    {
+        StringBuilder builder = new StringBuilder();
+
+        int index = ptr;
+        if (characters.charAt(index) == '\'')
+        {
+            index++;
+
+            while (index < characters.length()
+                   && characters.charAt(index) != '\'')
+            {
+                if (characters.charAt(index) == '\\') index++;
+                builder.append(characters.charAt(index++));
+            }
+        }
+        else if (characters.charAt(index) == '(' || characters.charAt(index) == ')')
+        {
+            builder.append(characters.charAt(index));
+        }
+        else
+        {
+            int start = index;
+            while (index < characters.length()
+                   && !Character.isWhitespace(characters.charAt(index))
+                   && characters.charAt(index) != '('
+                   && characters.charAt(index) != ')')
+            {
+                index++;
+            }
+            builder.append(characters.substring(start, index));
+        }
+
+        return builder.toString();
     }
 }

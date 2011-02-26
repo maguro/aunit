@@ -242,7 +242,7 @@ public class Assert
     public static void assertTree(int rootType, String preorder, Tree tree)
     {
         assertNotNull("tree should be non-null", tree);
-        assertPreordered("Expecting " + preorder + " from " + tree.toStringTree(), preorder, tree);
+        assertPreordered(null, preorder, tree);
         assertEquals("Comparing root type", rootType, tree.getType());
     }
 
@@ -271,7 +271,7 @@ public class Assert
     {
         assertNotNull("tree should be non-null", tree);
         assertEquals(message + " (asserting type of root)", rootType, tree.getType());
-        assertPreordered(message + ": Expecting " + preorder + " from " + tree.toStringTree(), preorder, tree);
+        assertPreordered(message, preorder, tree);
     }
 
     /**
@@ -296,7 +296,7 @@ public class Assert
     public static void assertTree(String rootText, String preorder, Tree tree)
     {
         assertNotNull("tree should be non-null", tree);
-        assertPreordered("Expecting " + preorder + " from " + tree.toStringTree(), preorder, tree);
+        assertPreordered(null, preorder, tree);
         assertEquals("Comparing root text", rootText, tree.getText());
     }
 
@@ -325,7 +325,7 @@ public class Assert
     {
         assertNotNull("tree should be non-null", tree);
         assertEquals(message + " (asserting type of root)", rootText, tree.getText());
-        assertPreordered(message + ": Expecting " + preorder + " from " + tree.toStringTree(), preorder, tree);
+        assertPreordered(message, preorder, tree);
     }
 
     private static void assertPreordered(String message, String preorder, Tree tree)
@@ -338,7 +338,7 @@ public class Assert
         }
         catch (PreorderException e)
         {
-            throw new AssertionFailedError(message + " " + e.getMessage());
+            throw new AssertionFailedError((message == null ? "E" : message + " - e") + "xpected " + e.getExpected() + " found " + e.getFound());
         }
     }
 
@@ -374,7 +374,7 @@ public class Assert
         }
         catch (PreorderException e)
         {
-            throw new AssertionFailedError(message + " " + e.getMessage());
+            throw new AssertionFailedError((message == null ? "E" : message + " - e") + "xpected " + e.getExpected() + " found " + e.getFound());
         }
     }
 

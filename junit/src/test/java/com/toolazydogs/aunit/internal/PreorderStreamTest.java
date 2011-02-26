@@ -37,6 +37,8 @@ public class PreorderStreamTest
         assertEquals("C", stream.token());
         stream.rightparen();
         stream.done();
+
+        assertEquals("(A B C)", stream.prettyString());
     }
 
     @Test
@@ -50,6 +52,8 @@ public class PreorderStreamTest
         assertEquals("C", stream.token());
         stream.rightparen();
         stream.done();
+
+        assertEquals("(A B C)", stream.prettyString());
     }
 
     @Test
@@ -63,6 +67,8 @@ public class PreorderStreamTest
         assertEquals("2", stream.token());
         stream.rightparen();
         stream.done();
+
+        assertEquals("(+ 1 2)", stream.prettyString());
     }
 
     @Test
@@ -75,6 +81,8 @@ public class PreorderStreamTest
         assertEquals(" 1   2  ", stream.token());
         stream.rightparen();
         stream.done();
+
+        assertEquals("(+ ' 1   2  ')", stream.prettyString());
     }
 
     @Test
@@ -87,6 +95,8 @@ public class PreorderStreamTest
         assertEquals(" 1 '\\  2  ", stream.token());
         stream.rightparen();
         stream.done();
+
+        assertEquals("(+ ' 1 '\\  2  ')", stream.prettyString());
     }
 
     @Test
@@ -96,6 +106,8 @@ public class PreorderStreamTest
 
         assertEquals("abc", stream.token());
         stream.done();
+
+        assertEquals("abc", stream.prettyString());
     }
 
     @Test
@@ -115,6 +127,9 @@ public class PreorderStreamTest
         }
         catch (PreorderException pe)
         {
+            assertEquals("(+ 1 2)", pe.getPretty());
+            assertEquals("<EOD>", pe.getExpected());
+            assertEquals(")", pe.getFound());
         }
     }
 
@@ -139,6 +154,11 @@ public class PreorderStreamTest
         }
         catch (PreorderException pe)
         {
+            assertEquals("(+\n" +
+                         "  (1)\n" +
+                         "  (2))", pe.getPretty());
+            assertEquals("<EOD>", pe.getExpected());
+            assertEquals("abc", pe.getFound());
         }
     }
 
@@ -158,6 +178,10 @@ public class PreorderStreamTest
         }
         catch (PreorderException pe)
         {
+            assertEquals("(+\n" +
+                         "  (1", pe.getPretty());
+            assertEquals(")", pe.getExpected());
+            assertEquals("asd", pe.getFound());
         }
     }
 
@@ -173,6 +197,9 @@ public class PreorderStreamTest
         }
         catch (PreorderException pe)
         {
+            assertEquals("", pe.getPretty());
+            assertEquals("(", pe.getExpected());
+            assertEquals("CAR", pe.getFound());
         }
     }
 }
