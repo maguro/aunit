@@ -32,7 +32,6 @@ public class PreorderStream
         this.characters = characters;
     }
 
-
     public String token()
     {
         while (ptr < characters.length() && Character.isWhitespace(characters.charAt(ptr))) ptr++;
@@ -44,20 +43,27 @@ public class PreorderStream
         boolean quoted = characters.charAt(ptr) == '\'';
         if (quoted)
         {
+            pretty.append("'");
+
             ptr++;
             StringBuilder builder = new StringBuilder();
 
             while (ptr < characters.length()
                    && characters.charAt(ptr) != '\'')
             {
-                if (characters.charAt(ptr) == '\\') ptr++;
+                if (characters.charAt(ptr) == '\\')
+                {
+                    pretty.append('\\');
+                    ptr++;
+                }
+                pretty.append(characters.charAt(ptr));
                 builder.append(characters.charAt(ptr++));
             }
             ptr++;
 
             token = builder.toString();
 
-            pretty.append("'").append(token).append("'");
+            pretty.append("'");
         }
         else
         {

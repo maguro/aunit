@@ -96,7 +96,7 @@ public class PreorderStreamTest
         stream.rightparen();
         stream.done();
 
-        assertEquals("(+ ' 1 '\\  2  ')", stream.prettyString());
+        assertEquals("(+ ' 1 \\'\\\\  2  ')", stream.prettyString());
     }
 
     @Test
