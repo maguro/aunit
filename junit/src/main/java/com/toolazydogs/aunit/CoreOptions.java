@@ -21,6 +21,7 @@ import org.antlr.runtime.Lexer;
 import org.antlr.runtime.Parser;
 
 import com.toolazydogs.aunit.internal.DefaultCompositeOption;
+import org.antlr.runtime.tree.TreeParser;
 
 
 /**
@@ -76,6 +77,17 @@ public class CoreOptions
     public static ParserOption parser(final Class<? extends Parser> parserClass)
     {
         return new ParserOption(parserClass);
+    }
+
+    /**
+     * Create a tree walker option instance that indicates the tree walker class used for testing.
+     *
+     * @param treeParserClass the tree parser class used for testing
+     * @return the parser option instance that indicates the parser class used for testing
+     */
+    public static TreeParserOption walker(final Class<? extends TreeParser> treeParserClass)
+    {
+        return new TreeParserOption(treeParserClass);
     }
 
     /**

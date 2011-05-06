@@ -1,8 +1,7 @@
 /**
- * Copyright © 2007 Terence Parr.
+ * Copyright - 2007 Terence Parr.
  * All rights reserved.
  */
-// START:header
 tree grammar CMinusWalker;
 
 options {
@@ -64,6 +63,10 @@ assignStat
 // END:stat
 
 // START:expr
+testExpr
+    :   ^(EXPR expr)
+    ;
+
 expr:   ^('==' expr expr)
     |   ^('!=' expr expr)
     |   ^('+' expr expr)

@@ -20,6 +20,7 @@ import java.lang.reflect.Method;
 
 import org.antlr.runtime.Parser;
 import org.antlr.runtime.RuleReturnScope;
+import org.antlr.runtime.tree.TreeParser;
 
 
 /**
@@ -61,4 +62,19 @@ class SelectedRule
 
         return (RuleReturnScope)method.invoke(parser, arguments);
     }
+
+    /**
+     * Invoke the selected tree parser method with its arguments
+     *
+     * @param treeParser the tree parser whose method will be invoked
+     * @return the <code>RuleReturnScope</code> returned by the parser
+     * @throws Exception if an error occurs
+     */
+    RuleReturnScope invoke(TreeParser treeParser) throws Exception
+    {
+        assert treeParser != null;
+
+        return (RuleReturnScope)method.invoke(treeParser, arguments);
+    }
+
 }

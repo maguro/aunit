@@ -18,13 +18,12 @@ package com.toolazydogs.aunit;
 
 import static com.toolazydogs.aunit.Assert.assertToken;
 import static com.toolazydogs.aunit.Assert.assertTree;
-import static com.toolazydogs.aunit.CoreOptions.lexer;
-import static com.toolazydogs.aunit.CoreOptions.options;
-import static com.toolazydogs.aunit.CoreOptions.parser;
-import static com.toolazydogs.aunit.Work.parse;
-import static com.toolazydogs.aunit.Work.rule;
-import static com.toolazydogs.aunit.Work.scan;
+import static com.toolazydogs.aunit.CoreOptions.*;
+import static com.toolazydogs.aunit.Work.*;
+import static com.toolazydogs.aunit.Work.walk;
 import static org.junit.Assert.fail;
+
+import com.toolazydogs.aunit.tests.CMinusWalker;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -52,7 +51,8 @@ public class CMinusTest
     {
         return options(
                 lexer(CMinusLexer.class),
-                parser(CMinusParser.class)
+                parser(CMinusParser.class),
+                walker(CMinusWalker.class)
         );
     }
 
@@ -70,7 +70,8 @@ public class CMinusTest
     {
         return options(
                 lexer(CMinusLexer.class).failOnError(false),
-                parser(CMinusParser.class).failOnError(false)
+                parser(CMinusParser.class).failOnError(false),
+                walker(CMinusWalker.class).failOnError(false)
         );
     }
 
@@ -79,7 +80,7 @@ public class CMinusTest
     {
         try
         {
-            parse("+ 1 2", rule("expression", 15));
+            parse("+ 1 2", rule("expression", arg(15)));
             fail("Should have failed parsing");
         }
         catch (ParserException e)
@@ -112,7 +113,7 @@ public class CMinusTest
         /**
          * Here's an example of invoking a rule that takes parameters
          */
-        assertTree(CMinusParser.EXPR, "(EXPR (+ 1 2))", parse("1 + 2", rule("expression", 15)));
+        assertTree(CMinusParser.EXPR, "(EXPR (+ 1 2))", parse("1 + 2", rule("expression", arg(15))));
     }
 
     @Test
@@ -120,13 +121,27 @@ public class CMinusTest
     {
         try
         {
-            parse("+ 1 2", rule("expression", 15));
+            parse("+ 1 2", rule("expression", arg(15)));
         }
         catch (ParserException e)
         {
             fail("This configuration should not have thrown an exception");
         }
     }
+
+    @Test
+    public void testTreeTest() throws Exception
+    {
+        try
+        {
+            walk(withRule("testExpr"), resultOf(parse("1 + 2", rule("expression", arg(15)))));
+        }
+        catch (ParserException e)
+        {
+            fail("This configuration should not have thrown an exception");
+        }
+    }
+
 
     /**
      * This test does not have a name of "oddballTest" or that begins with
@@ -150,7 +165,7 @@ public class CMinusTest
 
         try
         {
-            assertTree(CMinusParser.EXPR, "(EXPR (+ 1 2))", parse("1 + 2", rule("expression", 15)));
+            assertTree(CMinusParser.EXPR, "(EXPR (+ 1 2))", parse("1 + 2", rule("expression", arg(15))));
             fail("Unconfigured test should have failed");
         }
         catch (IllegalStateException e)
