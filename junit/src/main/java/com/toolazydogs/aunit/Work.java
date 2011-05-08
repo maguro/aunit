@@ -16,27 +16,18 @@
  */
 package com.toolazydogs.aunit;
 
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.FileInputStream;
+import com.toolazydogs.aunit.internal.ParserWrapper;
+import com.toolazydogs.aunit.internal.TreeParserWrapper;
+import org.antlr.runtime.*;
+import org.antlr.runtime.tree.CommonTreeNodeStream;
+import org.antlr.runtime.tree.Tree;
+import org.antlr.runtime.tree.TreeParser;
+
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
-
-import com.toolazydogs.aunit.internal.TreeParserWrapper;
-import org.antlr.runtime.ANTLRInputStream;
-import org.antlr.runtime.ANTLRStringStream;
-import org.antlr.runtime.CommonTokenStream;
-import org.antlr.runtime.Lexer;
-import org.antlr.runtime.Parser;
-import org.antlr.runtime.RuleReturnScope;
-import org.antlr.runtime.tree.CommonTreeNodeStream;
-import org.antlr.runtime.tree.Tree;
-
-import com.toolazydogs.aunit.internal.ParserWrapper;
-import org.antlr.runtime.tree.TreeParser;
 
 
 /**
@@ -212,10 +203,6 @@ public final class Work
         return new ArgumentBuilder(arguments);
     }
 
-    public static ArgumentBuilder arg(Object argument) {
-        return new ArgumentBuilder(argument);
-    }
-
     public static TreeBuilder resultOf(Tree tree) {
         return new TreeBuilder(tree);
     }
@@ -241,42 +228,6 @@ public final class Work
             return this.tree;
         }
     }
-
-//    /**
-//     * Parse a set of characters and return an instance of {@link Tree}.
-//     * This tree can then be fed into <code>Assert.assertTree(...)</code>.
-//     * <p/>
-//     * This method will throw an exception if there was an error parsing.  It
-//     * will also throw {@link ParserException} if the parsing failed and the
-//     * test has indicated that the parser should fail on error; see
-//     * {@link ParserOption#failOnError(boolean)}.
-//     *
-//     * @param walkerRule   the starting walker rule
-//     * @param tree the input tree
-//     * @throws Exception if there is an error parsing the characters or during tree walking
-//     * @see #parse(String, SelectedRule)
-//     */
-//    public static boolean walk(String walkerRule, Tree tree) throws Exception
-//    {
-//        if (walkerRule == null) throw new IllegalArgumentException("WalkerRule cannot be null");
-//        if (tree == null) throw new IllegalArgumentException("Tree cannot be null, please use parse()");
-//        if (AunitRuntime.getLexerFactory() == null) throw new IllegalStateException("Lexer factory not set by configuration");
-//        if (AunitRuntime.getParserFactory() == null) throw new IllegalStateException("Parser factory not set by configuration");
-//        if (AunitRuntime.getTreeParserFactory() == null) throw new IllegalStateException("TreeWalker factory not set by configuration");
-//
-//        TreeParser treeParser = AunitRuntime.getTreeParserFactory().generate(new CommonTreeNodeStream(tree));
-//
-////        RuleReturnScope rs = selectedRule.invoke(treeParser);
-//
-//        TreeParserWrapper wrapper = (TreeParserWrapper)treeParser;
-//        if (wrapper.isFailOnError() && !wrapper.getErrors().isEmpty())
-//        {
-//            throw new ParserException(wrapper.getErrors());
-//        }
-//
-//        return true;
-//    }
-
 
 //    /**
 //     * Generate an instance of the configured parser using a string as a

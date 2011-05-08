@@ -16,8 +16,7 @@
  */
 package com.toolazydogs.aunit.internal;
 
-import java.lang.reflect.Constructor;
-
+import com.toolazydogs.aunit.LexerSetup;
 import org.antlr.runtime.CharStream;
 import org.antlr.runtime.Lexer;
 import org.antlr.runtime.RecognizerSharedState;
@@ -26,20 +25,24 @@ import org.objectweb.asm.FieldVisitor;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
 
+import java.lang.reflect.Constructor;
+
 
 /**
  *
  */
-public class LexerFactory implements Opcodes
+public class LexerFactory<L extends Lexer> implements Opcodes
 {
-    private final Class<? extends Lexer> lexerClass;
+    private final Class<L> lexerClass;
+    private final LexerSetup<L> lexerSetup;
     private final boolean failOnError;
-    private Class<? extends Lexer> wrapperClass;
+    private Class<L> wrapperClass;
 
-    public LexerFactory(Class<? extends Lexer> lexerClass, boolean failOnError)
+    public LexerFactory(Class<L> lexerClass, boolean failOnError, LexerSetup<L> lexerSetup)
     {
         this.lexerClass = lexerClass;
         this.failOnError = failOnError;
+        this.lexerSetup = lexerSetup;
     }
 
     public Lexer generate() throws Exception
@@ -49,9 +52,13 @@ public class LexerFactory implements Opcodes
 
     public Lexer generate(CharStream input) throws Exception
     {
-        Class<? extends Lexer> wc = getWrapperClass();
+        Class<L> wc = getWrapperClass();
         Constructor c = wc.getConstructor(CharStream.class);
         LexerWrapper wrapper = (LexerWrapper)c.newInstance(input);
+
+        if (lexerSetup != null){
+            lexerSetup.config((L) wrapper);
+        }
 
         wrapper.setFailOnError(failOnError);
 
@@ -64,18 +71,22 @@ public class LexerFactory implements Opcodes
         Constructor c = wc.getConstructor(CharStream.class, RecognizerSharedState.class);
         LexerWrapper wrapper = (LexerWrapper)c.newInstance(input, state);
 
+        if (lexerSetup != null){
+            lexerSetup.config((L) wrapper);
+        }
+
         wrapper.setFailOnError(failOnError);
 
         return (Lexer)wrapper;
     }
 
-    private Class<? extends Lexer> getWrapperClass()
+    private Class<L> getWrapperClass()
     {
         if (wrapperClass == null) wrapperClass = loadClass();
         return wrapperClass;
     }
 
-    private Class<? extends Lexer> loadClass()
+    private Class<L> loadClass()
     {
         final String parent = lexerClass.getName().replace('.', '/');
         final String name = "com/toolazydogs/aunit/asm/" + parent;

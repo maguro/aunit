@@ -16,19 +16,17 @@
  */
 package com.toolazydogs.aunit;
 
-import static com.toolazydogs.aunit.Assert.assertToken;
-import static com.toolazydogs.aunit.Assert.assertTree;
-import static com.toolazydogs.aunit.CoreOptions.*;
-import static com.toolazydogs.aunit.Work.*;
-import static com.toolazydogs.aunit.Work.walk;
-import static org.junit.Assert.fail;
-
+import com.toolazydogs.aunit.tests.CMinusLexer;
+import com.toolazydogs.aunit.tests.CMinusParser;
 import com.toolazydogs.aunit.tests.CMinusWalker;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import com.toolazydogs.aunit.tests.CMinusLexer;
-import com.toolazydogs.aunit.tests.CMinusParser;
+import static com.toolazydogs.aunit.Assert.assertToken;
+import static com.toolazydogs.aunit.Assert.assertTree;
+import static com.toolazydogs.aunit.CoreOptions.*;
+import static com.toolazydogs.aunit.Work.*;
+import static org.junit.Assert.fail;
 
 
 /**
@@ -80,7 +78,7 @@ public class CMinusTest
     {
         try
         {
-            parse("+ 1 2", rule("expression", arg(15)));
+            parse("+ 1 2", rule("expression", args(15)));
             fail("Should have failed parsing");
         }
         catch (ParserException e)
@@ -113,7 +111,7 @@ public class CMinusTest
         /**
          * Here's an example of invoking a rule that takes parameters
          */
-        assertTree(CMinusParser.EXPR, "(EXPR (+ 1 2))", parse("1 + 2", rule("expression", arg(15))));
+        assertTree(CMinusParser.EXPR, "(EXPR (+ 1 2))", parse("1 + 2", rule("expression", args(15))));
     }
 
     @Test
@@ -121,7 +119,7 @@ public class CMinusTest
     {
         try
         {
-            parse("+ 1 2", rule("expression", arg(15)));
+            parse("+ 1 2", rule("expression", args(15)));
         }
         catch (ParserException e)
         {
@@ -134,7 +132,7 @@ public class CMinusTest
     {
         try
         {
-            walk(withRule("testExpr"), resultOf(parse("1 + 2", rule("expression", arg(15)))));
+            walk(withRule("testExpr"), resultOf(parse("1 + 2", rule("expression", args(15)))));
         }
         catch (ParserException e)
         {
@@ -165,7 +163,7 @@ public class CMinusTest
 
         try
         {
-            assertTree(CMinusParser.EXPR, "(EXPR (+ 1 2))", parse("1 + 2", rule("expression", arg(15))));
+            assertTree(CMinusParser.EXPR, "(EXPR (+ 1 2))", parse("1 + 2", rule("expression", args(15))));
             fail("Unconfigured test should have failed");
         }
         catch (IllegalStateException e)

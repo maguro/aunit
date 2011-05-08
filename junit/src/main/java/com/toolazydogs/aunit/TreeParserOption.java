@@ -23,14 +23,16 @@ import org.junit.runners.model.Statement;
 /**
  * TreeParser options to be used for configuring tests.
  */
-public class TreeParserOption implements Option {
-    private final Class<? extends TreeParser> treeParserClass;
+public class TreeParserOption<T extends TreeParser> implements Option {
+    private final Class<T> treeParserClass;
+    private final TreeParserSetup<T> treeParserSetup;
     private boolean failOnError = true;
 
-    TreeParserOption(Class<? extends TreeParser> parserClass) {
+    TreeParserOption(Class<T> parserClass, TreeParserSetup<T> treeParserSetup) {
         assert parserClass != null;
 
         this.treeParserClass = parserClass;
+        this.treeParserSetup = treeParserSetup;
     }
 
     Class<? extends TreeParser> getTreeParserClass() {
@@ -80,7 +82,7 @@ public class TreeParserOption implements Option {
         return new Statement() {
             @Override
             public void evaluate() throws Throwable {
-                AunitRuntime.setTreeParserFactory(new TreeParserFactory(treeParserClass, failOnError));
+                AunitRuntime.setTreeParserFactory(new TreeParserFactory(treeParserClass, failOnError, treeParserSetup));
             }
         };
     }

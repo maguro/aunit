@@ -16,12 +16,12 @@
  */
 package com.toolazydogs.aunit;
 
-import static com.toolazydogs.aunit.internal.OptionUtils.expand;
+import com.toolazydogs.aunit.internal.DefaultCompositeOption;
 import org.antlr.runtime.Lexer;
 import org.antlr.runtime.Parser;
-
-import com.toolazydogs.aunit.internal.DefaultCompositeOption;
 import org.antlr.runtime.tree.TreeParser;
+
+import static com.toolazydogs.aunit.internal.OptionUtils.expand;
 
 
 /**
@@ -65,7 +65,13 @@ public class CoreOptions
      */
     public static LexerOption lexer(final Class<? extends Lexer> lexerClass)
     {
-        return new LexerOption(lexerClass);
+        return lexer(lexerClass, null);
+    }
+
+    //TODO comment
+    public static <L extends Lexer> LexerOption lexer(final Class<L> lexerClass, final LexerSetup<L> setup)
+    {
+        return new LexerOption(lexerClass, setup);
     }
 
     /**
@@ -76,7 +82,13 @@ public class CoreOptions
      */
     public static ParserOption parser(final Class<? extends Parser> parserClass)
     {
-        return new ParserOption(parserClass);
+        return parser(parserClass, null);
+    }
+
+    //TODO comment
+    public static <P extends Parser> ParserOption parser(final Class<P> parserClass, final ParserSetup<P> setup)
+    {
+        return new ParserOption(parserClass, setup);
     }
 
     /**
@@ -87,7 +99,13 @@ public class CoreOptions
      */
     public static TreeParserOption walker(final Class<? extends TreeParser> treeParserClass)
     {
-        return new TreeParserOption(treeParserClass);
+        return walker(treeParserClass, null);
+    }
+
+    //TODO comment
+    public static <T extends TreeParser> TreeParserOption walker(final Class<T> treeParserClass, final TreeParserSetup<T> setup)
+    {
+        return new TreeParserOption(treeParserClass, setup);
     }
 
     /**

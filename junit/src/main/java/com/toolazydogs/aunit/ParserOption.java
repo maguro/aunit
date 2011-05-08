@@ -25,19 +25,21 @@ import com.toolazydogs.aunit.internal.ParserFactory;
 /**
  * Parser options to be used for configuring tests.
  */
-public class ParserOption implements Option
+public class ParserOption<P extends Parser> implements Option
 {
-    private final Class<? extends Parser> parserClass;
+    private final Class<P> parserClass;
+    private final ParserSetup<P> parserSetup;
     private boolean failOnError = true;
 
-    ParserOption(Class<? extends Parser> parserClass)
+    ParserOption(Class<P> parserClass, ParserSetup<P> parserSetup)
     {
         assert parserClass != null;
 
         this.parserClass = parserClass;
+        this.parserSetup = parserSetup;
     }
 
-    Class<? extends Parser> getParserClass()
+    Class<P> getParserClass()
     {
         return parserClass;
     }
@@ -91,7 +93,7 @@ public class ParserOption implements Option
             @Override
             public void evaluate() throws Throwable
             {
-                AunitRuntime.setParserFactory(new ParserFactory(parserClass, failOnError));
+                AunitRuntime.setParserFactory(new ParserFactory(parserClass, failOnError, parserSetup));
             }
         };
     }
