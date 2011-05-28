@@ -16,24 +16,18 @@
  */
 package com.toolazydogs.aunit;
 
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.FileInputStream;
+import com.toolazydogs.aunit.internal.ParserWrapper;
+import com.toolazydogs.aunit.internal.TreeParserWrapper;
+import org.antlr.runtime.*;
+import org.antlr.runtime.tree.CommonTreeNodeStream;
+import org.antlr.runtime.tree.Tree;
+import org.antlr.runtime.tree.TreeParser;
+
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
-
-import org.antlr.runtime.ANTLRInputStream;
-import org.antlr.runtime.ANTLRStringStream;
-import org.antlr.runtime.CommonTokenStream;
-import org.antlr.runtime.Lexer;
-import org.antlr.runtime.Parser;
-import org.antlr.runtime.RuleReturnScope;
-import org.antlr.runtime.tree.Tree;
-
-import com.toolazydogs.aunit.internal.ParserWrapper;
 
 
 /**
@@ -75,7 +69,7 @@ public final class Work
      * @param selectedRule the starting rule
      * @return the tree that results from a successful parse
      * @throws Exception if there is an error parsing the characters
-     * @see #rule(String, Object...)
+     * @see #rule(String, com.toolazydogs.aunit.Work.ArgumentBuilder)
      */
     public static Tree parse(String characters, SelectedRule selectedRule) throws Exception
     {
@@ -102,12 +96,26 @@ public final class Work
      * Select a rule to be used as a starting point in
      *
      * @param rule      the name of the rule to select
-     * @param arguments arguments to be passed in the invocation of the rule when parsing
      * @return the selected rule
      * @throws Exception if no rule can be found
      * @see #parse(String, SelectedRule)
      */
-    public static SelectedRule rule(String rule, Object... arguments) throws Exception
+    public static SelectedRule rule(String rule) throws Exception
+    {
+        return rule(rule, args());
+    }
+
+    /**
+     * Select a rule to be used as a starting point in
+     *
+     * @param rule      the name of the rule to select
+     * @param arguments arguments to be passed in the invocation of the rule when parsing
+     * @return the selected rule
+     * @throws Exception if no rule can be found
+     * @see #parse(String, SelectedRule)
+     * @see #args(Object...)
+     */
+    public static SelectedRule rule(String rule, ArgumentBuilder arguments) throws Exception
     {
         if (AunitRuntime.getParserFactory() == null) throw new IllegalStateException("Parser factory not set by configuration");
 
@@ -115,7 +123,41 @@ public final class Work
         {
             if (method.getName().equals(rule))
             {
-                return new SelectedRule(method, arguments);
+                return new SelectedRule(method, arguments.get());
+            }
+        }
+
+        throw new Exception("Rule " + rule + " not found");
+    }
+
+
+    /**
+     * Select a tree rule be used as a starting point in tree walking
+     *
+     * @param rule      the name of the rule to select
+     * @return the selected rule
+     * @throws Exception if no rule can be found
+     */
+    public static SelectedRule withRule(String rule) throws Exception {
+        return withRule(rule, args());
+    }
+
+    /**
+     * Select a tree rule be used as a starting point in tree walking
+     *
+     * @param rule      the name of the rule to select
+     * @param arguments arguments to be passed in the invocation of the rule when parsing
+     * @return the selected rule
+     * @throws Exception if no rule can be found
+     */
+    public static SelectedRule withRule(String rule, ArgumentBuilder arguments) throws Exception {
+        if (AunitRuntime.getTreeParserFactory() == null) throw new IllegalStateException("TreeParser factory not set by configuration");
+
+        for (Method method : collectMethods(AunitRuntime.getTreeParserFactory().getTreeParserClass()))
+        {
+            if (method.getName().equals(rule))
+            {
+                return new SelectedRule(method, arguments.get());
             }
         }
 
@@ -123,40 +165,105 @@ public final class Work
     }
 
     /**
-     * Generate an instance of the configured parser using a string as a
-     * source for input.
+     * Parse a set of characters and return an instance of {@link Tree}.
+     * This tree can then be fed into <code>Assert.assertTree(...)</code>.
+     * <p/>
+     * This method will throw an exception if there was an error parsing.  It
+     * will also throw {@link ParserException} if the parsing failed and the
+     * test has indicated that the parser should fail on error; see
+     * {@link ParserOption#failOnError(boolean)}.
      *
-     * @param src the string to use as input to the new parser instance.
-     * @param <T> the type of the parser
-     * @return an instance of the configured parser
-     * @throws Exception if there is an error generating the parser
+     * @param walkerRule the starting walker rule
+     * @param tree the tree to be walked
+     * @return true on success
+     * @throws Exception if there is an error during walking
+     * @see #withRule(String, com.toolazydogs.aunit.Work.ArgumentBuilder)
      */
-    public static <T> T generateParser(String src) throws Exception
+    public static boolean walk(SelectedRule walkerRule, TreeBuilder tree) throws Exception
     {
-        ANTLRInputStream input = new ANTLRInputStream(new ByteArrayInputStream(src.getBytes()));
-        Lexer lexer = AunitRuntime.getLexerFactory().generate(input);
-        CommonTokenStream tokens = new CommonTokenStream(lexer);
-        //noinspection unchecked
-        return (T)AunitRuntime.getParserFactory().generate(tokens);
+        if (walkerRule == null) throw new IllegalArgumentException("WalkerRule cannot be null, please use rule()");
+        if (tree == null) throw new IllegalArgumentException("Tree cannot be null");
+        if (AunitRuntime.getTreeParserFactory() == null) throw new IllegalStateException("Walker factory not set by configuration");
+
+        TreeParser treeParser = AunitRuntime.getTreeParserFactory().generate(new CommonTreeNodeStream(tree.get()));
+
+        RuleReturnScope rs = walkerRule.invoke(treeParser);
+
+        TreeParserWrapper wrapper = (TreeParserWrapper)treeParser;
+        if (wrapper.isFailOnError() && !wrapper.getErrors().isEmpty())
+        {
+            throw new ParserException(wrapper.getErrors());
+        }
+
+        return true;
     }
 
-    /**
-     * Generate an instance of the configured parser using a file as a
-     * source for input.
-     *
-     * @param src the file to use as input to the new parser instance.
-     * @param <T> the type of the parser
-     * @return an instance of the configured parser
-     * @throws Exception if there is an error generating the parser
-     */
-    public static <T> T generateParser(File src) throws Exception
-    {
-        ANTLRInputStream input = new ANTLRInputStream(new FileInputStream(src));
-        Lexer lexer = AunitRuntime.getLexerFactory().generate(input);
-        CommonTokenStream tokens = new CommonTokenStream(lexer);
-        //noinspection unchecked
-        return (T)AunitRuntime.getParserFactory().generate(tokens);
+
+    public static ArgumentBuilder args(Object... arguments) {
+        return new ArgumentBuilder(arguments);
     }
+
+    public static TreeBuilder resultOf(Tree tree) {
+        return new TreeBuilder(tree);
+    }
+
+    public static class ArgumentBuilder {
+        private final Object[] arguments;
+        ArgumentBuilder(Object... arguments){
+            this.arguments = arguments;
+        }
+
+        Object[] get(){
+            return this.arguments;
+        }
+    }
+
+    public static class TreeBuilder {
+        private final Tree tree;
+        TreeBuilder(Tree tree){
+            this.tree = tree;
+        }
+
+        Tree get(){
+            return this.tree;
+        }
+    }
+
+//    /**
+//     * Generate an instance of the configured parser using a string as a
+//     * source for input.
+//     *
+//     * @param src the string to use as input to the new parser instance.
+//     * @param <T> the type of the parser
+//     * @return an instance of the configured parser
+//     * @throws Exception if there is an error generating the parser
+//     */
+//    public static <T> T generateParser(String src) throws Exception
+//    {
+//        ANTLRInputStream input = new ANTLRInputStream(new ByteArrayInputStream(src.getBytes()));
+//        Lexer lexer = AunitRuntime.getLexerFactory().generate(input);
+//        CommonTokenStream tokens = new CommonTokenStream(lexer);
+//        //noinspection unchecked
+//        return (T)AunitRuntime.getParserFactory().generate(tokens);
+//    }
+//
+//    /**
+//     * Generate an instance of the configured parser using a file as a
+//     * source for input.
+//     *
+//     * @param src the file to use as input to the new parser instance.
+//     * @param <T> the type of the parser
+//     * @return an instance of the configured parser
+//     * @throws Exception if there is an error generating the parser
+//     */
+//    public static <T> T generateParser(File src) throws Exception
+//    {
+//        ANTLRInputStream input = new ANTLRInputStream(new FileInputStream(src));
+//        Lexer lexer = AunitRuntime.getLexerFactory().generate(input);
+//        CommonTokenStream tokens = new CommonTokenStream(lexer);
+//        //noinspection unchecked
+//        return (T)AunitRuntime.getParserFactory().generate(tokens);
+//    }
 
     /**
      * Recursively collect the set of declared methods of a class and

@@ -16,8 +16,7 @@
  */
 package com.toolazydogs.aunit.internal;
 
-import java.lang.reflect.Constructor;
-
+import com.toolazydogs.aunit.ParserSetup;
 import org.antlr.runtime.CharStream;
 import org.antlr.runtime.Parser;
 import org.antlr.runtime.RecognizerSharedState;
@@ -27,19 +26,25 @@ import org.objectweb.asm.FieldVisitor;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
 
+import java.lang.reflect.Constructor;
+
 
 /**
  *
  */
-public class ParserFactory implements Opcodes
+public class ParserFactory<P extends Parser> implements Opcodes
 {
-    private final Class<? extends Parser> parserClass;
+    private final Class<P> parserClass;
+    private final ParserSetup<P> parserSetup;
     private final boolean failOnError;
-    private Class<? extends Parser> wrapperClass;
+    private Class<P> wrapperClass;
 
-    public ParserFactory(Class<? extends Parser> parserClass, boolean failOnError)
+    public ParserFactory(Class parserClass, boolean failOnError, ParserSetup<P> parserSetup)
     {
+        assert parserClass != null;
+
         this.parserClass = parserClass;
+        this.parserSetup = parserSetup;
         this.failOnError = failOnError;
     }
 
@@ -50,9 +55,13 @@ public class ParserFactory implements Opcodes
 
     public Parser generate(TokenStream input) throws Exception
     {
-        Class<? extends Parser> wc = getWrapperClass();
+        Class<P> wc = getWrapperClass();
         Constructor c = wc.getConstructor(TokenStream.class);
         ParserWrapper wrapper = (ParserWrapper)c.newInstance(input);
+
+        if (parserSetup != null){
+            parserSetup.config((P) wrapper);
+        }
 
         wrapper.setFailOnError(failOnError);
 
@@ -61,22 +70,26 @@ public class ParserFactory implements Opcodes
 
     public Parser generate(TokenStream input, RecognizerSharedState state) throws Exception
     {
-        Class<? extends Parser> wc = getWrapperClass();
+        Class<P> wc = getWrapperClass();
         Constructor c = wc.getConstructor(CharStream.class, RecognizerSharedState.class);
         ParserWrapper wrapper = (ParserWrapper)c.newInstance(input, state);
+
+        if (parserSetup != null){
+            parserSetup.config((P) wrapper);
+        }
 
         wrapper.setFailOnError(failOnError);
 
         return (Parser)wrapper;
     }
 
-    private Class<? extends Parser> getWrapperClass()
+    private Class<P> getWrapperClass()
     {
         if (wrapperClass == null) wrapperClass = loadClass();
         return wrapperClass;
     }
 
-    private Class<? extends Parser> loadClass()
+    private Class<P> loadClass()
     {
         final String parent = parserClass.getName().replace('.', '/');
         final String name = "com/toolazydogs/aunit/asm/" + parent;

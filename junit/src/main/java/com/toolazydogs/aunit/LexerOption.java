@@ -25,19 +25,21 @@ import com.toolazydogs.aunit.internal.LexerFactory;
 /**
  * Lexer options to be used for configuring tests.
  */
-public class LexerOption implements Option
+public class LexerOption<L extends Lexer> implements Option
 {
-    private final Class<? extends Lexer> lexerClass;
+    private final Class<L> lexerClass;
+    private final LexerSetup<L> lexerSetup;
     private boolean failOnError = true;
 
-    LexerOption(Class<? extends Lexer> lexerClass)
+    LexerOption(Class<L> lexerClass, LexerSetup<L> lexerSetup)
     {
         assert lexerClass != null;
 
         this.lexerClass = lexerClass;
+        this.lexerSetup = lexerSetup;
     }
 
-    Class<? extends Lexer> getLexerClass()
+    Class<L> getLexerClass()
     {
         return lexerClass;
     }
@@ -92,7 +94,7 @@ public class LexerOption implements Option
             @Override
             public void evaluate() throws Throwable
             {
-                AunitRuntime.setLexerFactory(new LexerFactory(lexerClass, failOnError));
+                AunitRuntime.setLexerFactory(new LexerFactory(lexerClass, failOnError, lexerSetup));
             }
         };
     }

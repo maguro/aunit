@@ -1,5 +1,5 @@
 /**
- * Copyright © 2007 Terence Parr.
+ * Copyright - 2007 Terence Parr.
  * All rights reserved.
  */
 grammar CMinus;
