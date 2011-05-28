@@ -12,7 +12,7 @@
     <groupId>com.toolazydogs.aunit</groupId>
     <artifactId>aunit-junit</artifactId>
     <name>ANTLR Unit Testing Framework :: JUnit</name>
-    <version>1.1.0-SNAPSHOT</version>
+    <version>2.0-SNAPSHOT</version>
     <packaging>jar</packaging>
     <description>ANTLR JUnit Project</description>
     <url>http://github.com/maguro/aunit</url>
