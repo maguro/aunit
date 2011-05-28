@@ -16,12 +16,12 @@
  */
 package com.toolazydogs.aunit;
 
-import com.toolazydogs.aunit.internal.DefaultCompositeOption;
+import static com.toolazydogs.aunit.internal.OptionUtils.expand;
 import org.antlr.runtime.Lexer;
 import org.antlr.runtime.Parser;
 import org.antlr.runtime.tree.TreeParser;
 
-import static com.toolazydogs.aunit.internal.OptionUtils.expand;
+import com.toolazydogs.aunit.internal.DefaultCompositeOption;
 
 
 /**

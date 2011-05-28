@@ -16,7 +16,8 @@
  */
 package com.toolazydogs.aunit.internal;
 
-import com.toolazydogs.aunit.TreeParserSetup;
+import java.lang.reflect.Constructor;
+
 import org.antlr.runtime.RecognizerSharedState;
 import org.antlr.runtime.tree.TreeNodeStream;
 import org.antlr.runtime.tree.TreeParser;
@@ -25,19 +26,21 @@ import org.objectweb.asm.FieldVisitor;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
 
-import java.lang.reflect.Constructor;
+import com.toolazydogs.aunit.TreeParserSetup;
 
 
 /**
  *
  */
-public class TreeParserFactory<T extends TreeParser> implements Opcodes {
+public class TreeParserFactory<T extends TreeParser> implements Opcodes
+{
     private final Class<T> treeParserClass;
     private final TreeParserSetup<T> treeParserSetup;
     private final boolean failOnError;
     private Class<T> wrapperClass;
 
-    public TreeParserFactory(Class<T> treeParserClass, boolean failOnError, TreeParserSetup<T> treeParserSetup) {
+    public TreeParserFactory(Class<T> treeParserClass, boolean failOnError, TreeParserSetup<T> treeParserSetup)
+    {
         assert treeParserClass != null;
 
         this.treeParserClass = treeParserClass;
@@ -45,44 +48,51 @@ public class TreeParserFactory<T extends TreeParser> implements Opcodes {
         this.treeParserSetup = treeParserSetup;
     }
 
-    public Class getTreeParserClass() {
+    public Class getTreeParserClass()
+    {
         return treeParserClass;
     }
 
-    public TreeParser generate(TreeNodeStream input) throws Exception {
+    public TreeParser generate(TreeNodeStream input) throws Exception
+    {
         Class<T> wc = getWrapperClass();
         Constructor c = wc.getConstructor(TreeNodeStream.class);
-        TreeParserWrapper wrapper = (TreeParserWrapper) c.newInstance(input);
+        TreeParserWrapper wrapper = (TreeParserWrapper)c.newInstance(input);
 
-        if (treeParserSetup != null){
-            treeParserSetup.config((T) wrapper);
+        if (treeParserSetup != null)
+        {
+            treeParserSetup.config((T)wrapper);
         }
 
         wrapper.setFailOnError(failOnError);
 
-        return (TreeParser) wrapper;
+        return (TreeParser)wrapper;
     }
 
-    public TreeParser generate(TreeNodeStream input, RecognizerSharedState state) throws Exception {
+    public TreeParser generate(TreeNodeStream input, RecognizerSharedState state) throws Exception
+    {
         Class<T> wc = getWrapperClass();
         Constructor c = wc.getConstructor(TreeNodeStream.class, RecognizerSharedState.class);
-        TreeParserWrapper wrapper = (TreeParserWrapper) c.newInstance(input, state);
+        TreeParserWrapper wrapper = (TreeParserWrapper)c.newInstance(input, state);
 
-        if (treeParserSetup != null){
-            treeParserSetup.config((T) wrapper);
+        if (treeParserSetup != null)
+        {
+            treeParserSetup.config((T)wrapper);
         }
 
         wrapper.setFailOnError(failOnError);
 
-        return (TreeParser) wrapper;
+        return (TreeParser)wrapper;
     }
 
-    private Class<T> getWrapperClass() {
+    private Class<T> getWrapperClass()
+    {
         if (wrapperClass == null) wrapperClass = loadClass();
         return wrapperClass;
     }
 
-    private Class<T> loadClass() {
+    private Class<T> loadClass()
+    {
         final String parent = treeParserClass.getName().replace('.', '/');
         final String name = "com/toolazydogs/aunit/asm/" + parent;
 

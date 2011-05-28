@@ -16,7 +16,8 @@
  */
 package com.toolazydogs.aunit.internal;
 
-import com.toolazydogs.aunit.LexerSetup;
+import java.lang.reflect.Constructor;
+
 import org.antlr.runtime.CharStream;
 import org.antlr.runtime.Lexer;
 import org.antlr.runtime.RecognizerSharedState;
@@ -25,7 +26,7 @@ import org.objectweb.asm.FieldVisitor;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
 
-import java.lang.reflect.Constructor;
+import com.toolazydogs.aunit.LexerSetup;
 
 
 /**
@@ -56,8 +57,9 @@ public class LexerFactory<L extends Lexer> implements Opcodes
         Constructor c = wc.getConstructor(CharStream.class);
         LexerWrapper wrapper = (LexerWrapper)c.newInstance(input);
 
-        if (lexerSetup != null){
-            lexerSetup.config((L) wrapper);
+        if (lexerSetup != null)
+        {
+            lexerSetup.config((L)wrapper);
         }
 
         wrapper.setFailOnError(failOnError);
@@ -71,8 +73,9 @@ public class LexerFactory<L extends Lexer> implements Opcodes
         Constructor c = wc.getConstructor(CharStream.class, RecognizerSharedState.class);
         LexerWrapper wrapper = (LexerWrapper)c.newInstance(input, state);
 
-        if (lexerSetup != null){
-            lexerSetup.config((L) wrapper);
+        if (lexerSetup != null)
+        {
+            lexerSetup.config((L)wrapper);
         }
 
         wrapper.setFailOnError(failOnError);

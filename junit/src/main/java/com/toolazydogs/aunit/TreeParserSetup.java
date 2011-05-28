@@ -18,7 +18,9 @@ package com.toolazydogs.aunit;
 
 import org.antlr.runtime.tree.TreeParser;
 
-public interface TreeParserSetup<T extends TreeParser> extends Setup {
+
+public interface TreeParserSetup<T extends TreeParser> extends Setup
+{
 
     void config(T walker);
 }

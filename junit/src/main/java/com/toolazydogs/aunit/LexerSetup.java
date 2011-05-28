@@ -18,7 +18,9 @@ package com.toolazydogs.aunit;
 
 import org.antlr.runtime.Lexer;
 
-public interface LexerSetup<L extends Lexer> extends Setup {
+
+public interface LexerSetup<L extends Lexer> extends Setup
+{
 
     void config(L lexer);
 }

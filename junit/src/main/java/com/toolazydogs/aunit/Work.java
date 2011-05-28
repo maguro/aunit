@@ -16,18 +16,23 @@
  */
 package com.toolazydogs.aunit;
 
-import com.toolazydogs.aunit.internal.ParserWrapper;
-import com.toolazydogs.aunit.internal.TreeParserWrapper;
-import org.antlr.runtime.*;
-import org.antlr.runtime.tree.CommonTreeNodeStream;
-import org.antlr.runtime.tree.Tree;
-import org.antlr.runtime.tree.TreeParser;
-
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
+
+import org.antlr.runtime.ANTLRStringStream;
+import org.antlr.runtime.CommonTokenStream;
+import org.antlr.runtime.Lexer;
+import org.antlr.runtime.Parser;
+import org.antlr.runtime.RuleReturnScope;
+import org.antlr.runtime.tree.CommonTreeNodeStream;
+import org.antlr.runtime.tree.Tree;
+import org.antlr.runtime.tree.TreeParser;
+
+import com.toolazydogs.aunit.internal.ParserWrapper;
+import com.toolazydogs.aunit.internal.TreeParserWrapper;
 
 
 /**
@@ -95,7 +100,7 @@ public final class Work
     /**
      * Select a rule to be used as a starting point in
      *
-     * @param rule      the name of the rule to select
+     * @param rule the name of the rule to select
      * @return the selected rule
      * @throws Exception if no rule can be found
      * @see #parse(String, SelectedRule)
@@ -134,11 +139,12 @@ public final class Work
     /**
      * Select a tree rule be used as a starting point in tree walking
      *
-     * @param rule      the name of the rule to select
+     * @param rule the name of the rule to select
      * @return the selected rule
      * @throws Exception if no rule can be found
      */
-    public static SelectedRule withRule(String rule) throws Exception {
+    public static SelectedRule withRule(String rule) throws Exception
+    {
         return withRule(rule, args());
     }
 
@@ -150,7 +156,8 @@ public final class Work
      * @return the selected rule
      * @throws Exception if no rule can be found
      */
-    public static SelectedRule withRule(String rule, ArgumentBuilder arguments) throws Exception {
+    public static SelectedRule withRule(String rule, ArgumentBuilder arguments) throws Exception
+    {
         if (AunitRuntime.getTreeParserFactory() == null) throw new IllegalStateException("TreeParser factory not set by configuration");
 
         for (Method method : collectMethods(AunitRuntime.getTreeParserFactory().getTreeParserClass()))
@@ -174,7 +181,7 @@ public final class Work
      * {@link ParserOption#failOnError(boolean)}.
      *
      * @param walkerRule the starting walker rule
-     * @param tree the tree to be walked
+     * @param tree       the tree to be walked
      * @return true on success
      * @throws Exception if there is an error during walking
      * @see #withRule(String, com.toolazydogs.aunit.Work.ArgumentBuilder)
@@ -199,32 +206,42 @@ public final class Work
     }
 
 
-    public static ArgumentBuilder args(Object... arguments) {
+    public static ArgumentBuilder args(Object... arguments)
+    {
         return new ArgumentBuilder(arguments);
     }
 
-    public static TreeBuilder resultOf(Tree tree) {
+    public static TreeBuilder resultOf(Tree tree)
+    {
         return new TreeBuilder(tree);
     }
 
-    public static class ArgumentBuilder {
+    public static class ArgumentBuilder
+    {
         private final Object[] arguments;
-        ArgumentBuilder(Object... arguments){
+
+        ArgumentBuilder(Object... arguments)
+        {
             this.arguments = arguments;
         }
 
-        Object[] get(){
+        Object[] get()
+        {
             return this.arguments;
         }
     }
 
-    public static class TreeBuilder {
+    public static class TreeBuilder
+    {
         private final Tree tree;
-        TreeBuilder(Tree tree){
+
+        TreeBuilder(Tree tree)
+        {
             this.tree = tree;
         }
 
-        Tree get(){
+        Tree get()
+        {
             return this.tree;
         }
     }

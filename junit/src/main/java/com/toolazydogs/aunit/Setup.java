@@ -16,5 +16,6 @@
  */
 package com.toolazydogs.aunit;
 
-public interface Setup {
+public interface Setup
+{
 }

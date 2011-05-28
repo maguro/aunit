@@ -16,17 +16,26 @@
  */
 package com.toolazydogs.aunit;
 
-import com.toolazydogs.aunit.tests.CMinusLexer;
-import com.toolazydogs.aunit.tests.CMinusParser;
-import com.toolazydogs.aunit.tests.CMinusWalker;
+import static com.toolazydogs.aunit.Assert.assertToken;
+import static com.toolazydogs.aunit.Assert.assertTree;
+import static com.toolazydogs.aunit.CoreOptions.lexer;
+import static com.toolazydogs.aunit.CoreOptions.options;
+import static com.toolazydogs.aunit.CoreOptions.parser;
+import static com.toolazydogs.aunit.CoreOptions.walker;
+import static com.toolazydogs.aunit.Work.args;
+import static com.toolazydogs.aunit.Work.parse;
+import static com.toolazydogs.aunit.Work.resultOf;
+import static com.toolazydogs.aunit.Work.rule;
+import static com.toolazydogs.aunit.Work.scan;
+import static com.toolazydogs.aunit.Work.walk;
+import static com.toolazydogs.aunit.Work.withRule;
+import static org.junit.Assert.fail;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import static com.toolazydogs.aunit.Assert.assertToken;
-import static com.toolazydogs.aunit.Assert.assertTree;
-import static com.toolazydogs.aunit.CoreOptions.*;
-import static com.toolazydogs.aunit.Work.*;
-import static org.junit.Assert.fail;
+import com.toolazydogs.aunit.tests.CMinusLexer;
+import com.toolazydogs.aunit.tests.CMinusParser;
+import com.toolazydogs.aunit.tests.CMinusWalker;
 
 
 /**

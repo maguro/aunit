@@ -16,7 +16,8 @@
  */
 package com.toolazydogs.aunit.internal;
 
-import com.toolazydogs.aunit.ParserSetup;
+import java.lang.reflect.Constructor;
+
 import org.antlr.runtime.CharStream;
 import org.antlr.runtime.Parser;
 import org.antlr.runtime.RecognizerSharedState;
@@ -26,7 +27,7 @@ import org.objectweb.asm.FieldVisitor;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
 
-import java.lang.reflect.Constructor;
+import com.toolazydogs.aunit.ParserSetup;
 
 
 /**
@@ -59,8 +60,9 @@ public class ParserFactory<P extends Parser> implements Opcodes
         Constructor c = wc.getConstructor(TokenStream.class);
         ParserWrapper wrapper = (ParserWrapper)c.newInstance(input);
 
-        if (parserSetup != null){
-            parserSetup.config((P) wrapper);
+        if (parserSetup != null)
+        {
+            parserSetup.config((P)wrapper);
         }
 
         wrapper.setFailOnError(failOnError);
@@ -74,8 +76,9 @@ public class ParserFactory<P extends Parser> implements Opcodes
         Constructor c = wc.getConstructor(CharStream.class, RecognizerSharedState.class);
         ParserWrapper wrapper = (ParserWrapper)c.newInstance(input, state);
 
-        if (parserSetup != null){
-            parserSetup.config((P) wrapper);
+        if (parserSetup != null)
+        {
+            parserSetup.config((P)wrapper);
         }
 
         wrapper.setFailOnError(failOnError);

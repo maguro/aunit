@@ -18,7 +18,9 @@ package com.toolazydogs.aunit;
 
 import org.antlr.runtime.Parser;
 
-public interface ParserSetup<P extends Parser> extends Setup {
+
+public interface ParserSetup<P extends Parser> extends Setup
+{
 
     void config(P parser);
 }

@@ -16,26 +16,31 @@
  */
 package com.toolazydogs.aunit;
 
-import com.toolazydogs.aunit.internal.TreeParserFactory;
 import org.antlr.runtime.tree.TreeParser;
 import org.junit.runners.model.Statement;
+
+import com.toolazydogs.aunit.internal.TreeParserFactory;
+
 
 /**
  * TreeParser options to be used for configuring tests.
  */
-public class TreeParserOption<T extends TreeParser> implements Option {
+public class TreeParserOption<T extends TreeParser> implements Option
+{
     private final Class<T> treeParserClass;
     private final TreeParserSetup<T> treeParserSetup;
     private boolean failOnError = true;
 
-    TreeParserOption(Class<T> parserClass, TreeParserSetup<T> treeParserSetup) {
+    TreeParserOption(Class<T> parserClass, TreeParserSetup<T> treeParserSetup)
+    {
         assert parserClass != null;
 
         this.treeParserClass = parserClass;
         this.treeParserSetup = treeParserSetup;
     }
 
-    Class<? extends TreeParser> getTreeParserClass() {
+    Class<? extends TreeParser> getTreeParserClass()
+    {
         return treeParserClass;
     }
 
@@ -46,7 +51,8 @@ public class TreeParserOption<T extends TreeParser> implements Option {
      * @return <code>true</code> if the tree parser will throw an exception if there
      *         is an error during a parse, <code>false</code> otherwise
      */
-    boolean isFailOnError() {
+    boolean isFailOnError()
+    {
         return failOnError;
     }
 
@@ -56,7 +62,8 @@ public class TreeParserOption<T extends TreeParser> implements Option {
      *
      * @return this tree parser option for more configuration
      */
-    public TreeParserOption failOnError() {
+    public TreeParserOption failOnError()
+    {
         failOnError = true;
         return this;
     }
@@ -70,7 +77,8 @@ public class TreeParserOption<T extends TreeParser> implements Option {
      *             otherwise
      * @return this tree parser option for more configuration
      */
-    public TreeParserOption failOnError(boolean fail) {
+    public TreeParserOption failOnError(boolean fail)
+    {
         failOnError = fail;
         return this;
     }
@@ -78,10 +86,13 @@ public class TreeParserOption<T extends TreeParser> implements Option {
     /**
      * {@inheritDoc}
      */
-    public Statement generateSetupStatement() {
-        return new Statement() {
+    public Statement generateSetupStatement()
+    {
+        return new Statement()
+        {
             @Override
-            public void evaluate() throws Throwable {
+            public void evaluate() throws Throwable
+            {
                 AunitRuntime.setTreeParserFactory(new TreeParserFactory(treeParserClass, failOnError, treeParserSetup));
             }
         };
@@ -90,10 +101,13 @@ public class TreeParserOption<T extends TreeParser> implements Option {
     /**
      * {@inheritDoc}
      */
-    public Statement generateTeardownStatement() {
-        return new Statement() {
+    public Statement generateTeardownStatement()
+    {
+        return new Statement()
+        {
             @Override
-            public void evaluate() throws Throwable {
+            public void evaluate() throws Throwable
+            {
                 AunitRuntime.setTreeParserFactory(null);
             }
         };
