@@ -16,12 +16,16 @@
  */
 package com.toolazydogs.aunit;
 
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileInputStream;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.antlr.runtime.ANTLRInputStream;
 import org.antlr.runtime.ANTLRStringStream;
 import org.antlr.runtime.CommonTokenStream;
 import org.antlr.runtime.Lexer;
@@ -246,41 +250,41 @@ public final class Work
         }
     }
 
-//    /**
-//     * Generate an instance of the configured parser using a string as a
-//     * source for input.
-//     *
-//     * @param src the string to use as input to the new parser instance.
-//     * @param <T> the type of the parser
-//     * @return an instance of the configured parser
-//     * @throws Exception if there is an error generating the parser
-//     */
-//    public static <T> T generateParser(String src) throws Exception
-//    {
-//        ANTLRInputStream input = new ANTLRInputStream(new ByteArrayInputStream(src.getBytes()));
-//        Lexer lexer = AunitRuntime.getLexerFactory().generate(input);
-//        CommonTokenStream tokens = new CommonTokenStream(lexer);
-//        //noinspection unchecked
-//        return (T)AunitRuntime.getParserFactory().generate(tokens);
-//    }
-//
-//    /**
-//     * Generate an instance of the configured parser using a file as a
-//     * source for input.
-//     *
-//     * @param src the file to use as input to the new parser instance.
-//     * @param <T> the type of the parser
-//     * @return an instance of the configured parser
-//     * @throws Exception if there is an error generating the parser
-//     */
-//    public static <T> T generateParser(File src) throws Exception
-//    {
-//        ANTLRInputStream input = new ANTLRInputStream(new FileInputStream(src));
-//        Lexer lexer = AunitRuntime.getLexerFactory().generate(input);
-//        CommonTokenStream tokens = new CommonTokenStream(lexer);
-//        //noinspection unchecked
-//        return (T)AunitRuntime.getParserFactory().generate(tokens);
-//    }
+    /**
+     * Generate an instance of the configured parser using a string as a
+     * source for input.
+     *
+     * @param src the string to use as input to the new parser instance.
+     * @param <T> the type of the parser
+     * @return an instance of the configured parser
+     * @throws Exception if there is an error generating the parser
+     */
+    public static <T> T generateParser(String src) throws Exception
+    {
+        ANTLRInputStream input = new ANTLRInputStream(new ByteArrayInputStream(src.getBytes()));
+        Lexer lexer = AunitRuntime.getLexerFactory().generate(input);
+        CommonTokenStream tokens = new CommonTokenStream(lexer);
+        //noinspection unchecked
+        return (T)AunitRuntime.getParserFactory().generate(tokens);
+    }
+
+    /**
+     * Generate an instance of the configured parser using a file as a
+     * source for input.
+     *
+     * @param src the file to use as input to the new parser instance.
+     * @param <T> the type of the parser
+     * @return an instance of the configured parser
+     * @throws Exception if there is an error generating the parser
+     */
+    public static <T> T generateParser(File src) throws Exception
+    {
+        ANTLRInputStream input = new ANTLRInputStream(new FileInputStream(src));
+        Lexer lexer = AunitRuntime.getLexerFactory().generate(input);
+        CommonTokenStream tokens = new CommonTokenStream(lexer);
+        //noinspection unchecked
+        return (T)AunitRuntime.getParserFactory().generate(tokens);
+    }
 
     /**
      * Recursively collect the set of declared methods of a class and
