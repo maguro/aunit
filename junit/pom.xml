@@ -32,6 +32,13 @@
             <url>http://www.toolazydogs.com</url>
             <timezone>-8</timezone>
         </developer>
+        <developer>
+            <id>porcelli</id>
+            <name>Alexandre Porcelli</name>
+            <email>alexandre.porcelli@gmail.com</email>
+            <url>http://porcelli.com.br</url>
+            <timezone>-3</timezone>
+        </developer>
     </developers>
 
     <properties>
