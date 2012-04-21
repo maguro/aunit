@@ -81,8 +81,9 @@
     </dependencies>
 
     <scm>
-        <connection>scm:git:git://github.com/maguro/aunit.git</connection>
-        <url>scm:git:git://github.com/maguro/aunit.git</url>
+        <connection>scm:git:git@github.com:maguro/aunit.git</connection>
+        <developerConnection>scm:git:git@github.com:maguro/aunit.git</developerConnection>
+        <url>scm:git:git@github.com:maguro/aunit.git</url>
     </scm>
 
 </project>
