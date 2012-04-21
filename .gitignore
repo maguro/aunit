@@ -2,5 +2,6 @@
 *.ipr
 *.iml
 *.iws
+.idea
 # all target dirs
 target
