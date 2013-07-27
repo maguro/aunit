@@ -5,3 +5,4 @@
 .idea
 # all target dirs
 target
+.DS_Store
